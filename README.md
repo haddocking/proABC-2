@@ -1,5 +1,5 @@
 [![codecov](https://codecov.io/gh/Francesco03/ParaNet/branch/master/graph/badge.svg?token=i6iY65xa32)](https://codecov.io/gh/Francesco03/ParaNet) [![Build Status](https://travis-ci.com/Francesco03/ParaNet.svg?token=Y28CupxHnupoqQHW4Vse&branch=master)](https://travis-ci.com/Francesco03/ParaNet)
-# ParaNet
+# proABC-2
 
 It predicts the antibody residues that will make contact with the antigen and the type of interaction using a **convolutional neural network (CNN)**.
 
