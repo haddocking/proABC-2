@@ -1,4 +1,3 @@
-[![codecov](https://codecov.io/gh/Francesco03/ParaNet/branch/master/graph/badge.svg?token=i6iY65xa32)](https://codecov.io/gh/Francesco03/ParaNet) [![Build Status](https://travis-ci.com/Francesco03/ParaNet.svg?token=Y28CupxHnupoqQHW4Vse&branch=master)](https://travis-ci.com/Francesco03/ParaNet)
 # proABC-2
 
 It predicts the antibody residues that will make contact with the antigen and the type of interaction using a **convolutional neural network (CNN)**.
@@ -10,20 +9,20 @@ The easiest way is using anaconda (https://www.anaconda.com/distribution/).
 ``` bash
 git clone https://github.com/Francesco03/ParaNet.git
 cd ParaNet
-conda env create #Create a conda enviroment named ParaNet with dependecies
+conda env create #Create a conda enviroment named proABC-2 with dependecies
 ```
 
 
 # Usage
 
 ``` bash
-cd ParaNet
-conda activate ParaNet #activate enviroment
-python ParaNet.py <input folder> <heavy fasta file> <light fasta file> #run code
+cd proABC-2
+conda activate proABC-2 #activate enviroment
+python proABC.py <input folder> <heavy fasta file> <light fasta file> #run code
 conda dectivate #deactivate enviroment
 
 #Example:
-python ParaNet.py Example heavy.fasta light.fasta
+python proABC.py Example heavy.fasta light.fasta
 ```
 
 # Output
@@ -47,6 +46,6 @@ They consist of  several columns:
 
 # Requirements
 
-ParaNet runs on **Python 3.6+** only.
+proABC-2 runs on **Python 3.6+** only.
 
 Dependencies should be installed via ```conda``` using ```conda env create```
