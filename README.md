@@ -7,7 +7,7 @@ It predicts the antibody residues that will make contact with the antigen and th
 The easiest way is using anaconda (https://www.anaconda.com/distribution/).
 
 ``` bash
-git clone https://github.com/Francesco03/ParaNet.git
+git clone https://github.com/haddocking/proABC-2.git
 cd ParaNet
 conda env create #Create a conda enviroment named proABC-2 with dependecies
 ```
