@@ -1,0 +1,29 @@
+language: python
+python:
+  - "3.6"
+install:
+  - wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh;
+  - bash miniconda.sh -b -p $HOME/miniconda
+  - export PATH="$HOME/miniconda/bin:$PATH"
+  - hash -r
+  - conda config --set always_yes yes --set changeps1 no
+  - conda update -q conda
+  - conda info -a
+  - conda env create 
+  - source activate proABC-2
+  - conda install -c conda-forge codecov 
+  - conda install -c anaconda coverage 
+   
+# slack notifications
+notifications:
+  slack: haddocking:ZjlkVnGEnCgy6Zoom3lXRTAj  # proABC-2
+
+env:
+  - CODECOV_TOKEN=a90232d9-a5df-4c40-b48a-280d820bba33
+
+# command to run tests with coverage
+script:
+  - python test_jobinput.py      
+#after_success:
+#  - codecov
+ 
