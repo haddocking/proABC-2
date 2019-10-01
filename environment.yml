@@ -1,4 +1,4 @@
-name: ParaNet
+name: proABC-2
 channels:
   - bioconda
   - anaconda
