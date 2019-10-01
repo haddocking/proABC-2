@@ -8,7 +8,7 @@ The easiest way is using anaconda (https://www.anaconda.com/distribution/).
 
 ``` bash
 git clone https://github.com/haddocking/proABC-2.git
-cd ParaNet
+cd proABC-2
 conda env create #Create a conda enviroment named proABC-2 with dependecies
 ```
 
