@@ -330,7 +330,7 @@ def checkInput(input, jobid):
                         line=line.upper()
                         seq = seq + line
                     else:
-                        message = 'Missing header at the beginning of the {} file. Please check your sequence'.format(input)
+                        message = 'Missing header at the beginning of the {} file. Please check your input.'.format(input)
                         write_error(message, jobid)
 
             if seq:
