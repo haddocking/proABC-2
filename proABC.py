@@ -60,7 +60,7 @@ def get_features(jobid, hmmpath, light, heavy, ig_database_H, ig_database_K, ig_
     myAb = {'input':{'H': '', 'L': '', 'K': ''}}
 
     # Chain H
-    Seq,isotype,message = ji.read_input_single('heavy_format.fasta', jobid, hmmpath, TargetName)
+    Seq,isotype = ji.read_input_single('heavy_format.fasta', jobid, hmmpath, TargetName)
     fhLog.write(heavy +' sequence is ' +  Seq + '\n')
     fhLog.write('Isotype is ' + isotype + '\n')
 
@@ -68,15 +68,12 @@ def get_features(jobid, hmmpath, light, heavy, ig_database_H, ig_database_K, ig_
         myAb['input'][isotype] = Seq
 
     # Chain L
-    Seq, isotype,message2 = ji.read_input_single('light_format.fasta', jobid, hmmpath, TargetName)
+    Seq, isotype = ji.read_input_single('light_format.fasta', jobid, hmmpath, TargetName)
     fhLog.write(light + ' sequence is ' + Seq + '\n')
     fhLog.write('Isotype is '+ isotype + '\n')
 
     if isotype:
         myAb['input'][isotype] = Seq
-
-    # Keep track of warning messages if present
-    ji.writeMessage(message, message2, jobid)
 
     # Remove tmp file
     ji.rmTmpFile(jobid)

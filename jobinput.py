@@ -14,7 +14,6 @@ def read_input_single(file, jobid, hmmpath, TargetName):
     thr = float(10e-40)
     aligned = ''
     isotype = ''
-    message = []
     handle = open(jobid + file, "r")
     # can be heavy or light
     header = ''
@@ -82,15 +81,13 @@ def read_input_single(file, jobid, hmmpath, TargetName):
 
             if (evalueH > thr) and (evalueK > thr) and (evalueL > thr):
 
-                message.append('Your input sequence has not been recognized as an antibody. Please check your input:')
-                message.append(line)
-                message.append(header)
+                message = 'Your input sequence has not been recognized as an antibody. Please check your input:{}'.format(header)
+                write_error(message, jobid)
 
             if (evalueH < thr and evalueK < thr) or (evalueH < thr and evalueL < thr):
-                message.append('Single chain antibody found. Please provide heavy and light chain as separate sequences.')
-                message.append(line)
-                message.append(header)
-            
+                message = 'Single chain antibody found in {}. Please provide heavy and light chain as separate sequences.'.format(header)
+                write_error(message, jobid)
+
             # identify isotype
             if evalueH < thr:
 
@@ -125,7 +122,7 @@ def read_input_single(file, jobid, hmmpath, TargetName):
                 isotype = 'L'
 
     handle.close()
-    return (aligned, isotype, message)
+    return aligned, isotype
 
 
 def isDNA(seq):
@@ -282,36 +279,12 @@ def BothChains(session, jobid):
     return(session)
 
 
-def writeMessage(message, message2, jobid):
-    if message:
-        if message2:
-            if message2[2] in ['light','heavy'] or message[2] in ['light','heavy']:
-                error = message[0] + '\n' + message[1] + '\n' + message2[1]+'\n'
-                write_error(error,jobid)
-            else:
-                error = message[0] + '\n' +message[2] +'\n' + message[1] + '\n'+message2[2] +'\n'  + message2[1]+'\n'
-                write_error(error, jobid)
-        else:
-            if message[2] in ['light', 'heavy']:
-                error = message[0] + '\n' + message[1] + '\n'
-                write_error(error, jobid)
-            else:
-                error = message[0] + '\n' +message[2] + '\n' +  message[1] + '\n'
-                write_error(error, jobid)
-    elif message2:
-        if message2[2] in ['light', 'heavy']:
-            error = message2[0] + '\n' + message2[1]
-            write_error(error, jobid)
-        else:
-            error = message2[0] + '\n' + message2[2] + '\n' + message2[1] + '\n'
-            write_error(error, jobid)
-
-
 def write_error(message, jobid):
     """Open error.log write error and exit job"""
     with open(jobid + 'error.log', 'w') as fhErr:
         fhErr.write('{}\n'.format(message))
     raise SystemExit('An error occurred. Check error.log file')
+
 
 def write_warning(message, jobid):
     """Open warning.log and write message"""

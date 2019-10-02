@@ -42,8 +42,8 @@ class TestJi(unittest.TestCase):
 
         # Read input
         target_name = TestJi.jobid.replace('/', '')
-        seq_h, isotype_h, message_h = ji.read_input_single(self.out_h, TestJi.jobid, TestJi.hmmpath, target_name)
-        seq_l, isotype_l, message_l = ji.read_input_single(self.out_l, TestJi.jobid, TestJi.hmmpath, target_name)
+        seq_h, isotype_h = ji.read_input_single(self.out_h, TestJi.jobid, TestJi.hmmpath, target_name)
+        seq_l, isotype_l = ji.read_input_single(self.out_l, TestJi.jobid, TestJi.hmmpath, target_name)
 
         # Testing chain H
         self.assertEqual(self.golden_h, seq_h, "Heavy chain is different \n")  # Alignment
