@@ -68,15 +68,15 @@ def read_input_single(file, jobid, hmmpath, TargetName):
 
             # more than one domain found in the input sequence. HMM failed to align sequence
             if not evalueH:
-                message = 'Alignment failed for chain H:\n' + line + '\n'
+                message = 'Alignment failed for chain H:\n' + line
                 write_error(message, jobid)
 
             if not evalueK:
-                message = 'Alignment failed for chain L:\n' + line + '\n'
+                message = 'Alignment failed for chain L:\n' + line
                 write_error(message, jobid)
 
             if not evalueL:
-                message = 'Alignment failed for chain L:\n' + line + '\n'
+                message = 'Alignment failed for chain L:\n' + line
                 write_error(message, jobid)
 
             if (evalueH > thr) and (evalueK > thr) and (evalueL > thr):
@@ -94,8 +94,8 @@ def read_input_single(file, jobid, hmmpath, TargetName):
             if evalueH < thr:
 
                 if file == 'light_format.fasta':
-                    warn = "Heavy chain found when light expected."
-                    write_warning(warn, jobid)
+                    warn = "Heavy chain found when light expected"
+                    write_error(warn, jobid)
 
                 aligned = align(searchInputName, heavy_hmm, hmmpath, jobid, alignOutputName, TargetName, header)
                 if not aligned:
@@ -106,7 +106,7 @@ def read_input_single(file, jobid, hmmpath, TargetName):
             if (evalueK < evalueL) and (evalueK < thr):
                 if file == 'heavy_format.fasta':
                     warn = "Kappa chain found when heavy expected."
-                    write_warning(warn, jobid)
+                    write_error(warn, jobid)
                 aligned = align(searchInputName, kapp_hmm, hmmpath, jobid, alignOutputName, TargetName, header)
                 if not aligned:
                     message = 'Alignment failed for chain L:\n' + line + '\n'
@@ -116,7 +116,7 @@ def read_input_single(file, jobid, hmmpath, TargetName):
             if (evalueL < evalueK) and (evalueL < thr):
                 if file == 'heavy_format.fasta':
                     warn = "Lambda chain found when heavy expected."
-                    write_warning(warn, jobid)
+                    write_error(warn, jobid)
                 aligned = align(searchInputName, lambda_hmm, hmmpath, jobid, alignOutputName, TargetName, header)
                 if not aligned:
                     message = 'Alignment failed for chain L:\n' + line + '\n'
@@ -176,7 +176,7 @@ def scan(searchInputName, hmm, hmmpath, jobid, searchOutputName):
 
     if errors:
         # write errors
-        write_warning(errors, jobid)
+        write_error(errors, jobid)
 
     # parse hmmsearch output file
     score = readhmmsearch(searchOutputName)
@@ -221,7 +221,7 @@ def align(searchInputName, hmm, hmmpath, jobid, alignOutputName, TargetName, hea
 
     if errors:
         # write errors
-        write_warning(errors, jobid)
+        write_error(errors, jobid)
 
     # Parsing alignment file
     aligned = read_align(alignOutputName, TargetName, jobid)
@@ -270,13 +270,13 @@ def BothChains(session, jobid):
         else:
 
             if not session[key]['L'] and not session[key]['K'] and not session[key]['H']:
-                write_error('antibody missing both heavy and light chain.\n', jobid)
+                write_error('antibody missing both heavy and light chain', jobid)
 
             elif not session[key]['H']:
-                write_error('antibody is missing heavy chain.\n', jobid)
+                write_error('antibody is missing heavy chain', jobid)
 
             else:
-                write_error('antibody missing light chain.\n', jobid)
+                write_error('antibody missing light chain', jobid)
 
     OutH.close()
     OutL.close()
@@ -313,12 +313,12 @@ def write_error(message, jobid):
     """Open error.log write error and exit job"""
     with open(jobid + 'error.log', 'w') as fhErr:
         fhErr.write('{}\n'.format(message))
+    raise SystemExit('An error occurred. Check error.log file')
 
-
-def write_warning(message, jobid):
-    """Open warning.log and write message"""
-    with open(jobid + 'error.log', 'a') as fhWar:
-        fhWar.write(message.decode('utf-8'))
+#def write_warning(message, jobid):
+   # """Open warning.log and write message"""
+    #with open(jobid + 'warnings.log', 'a') as fhWar:
+     #   fhWar.write(message)
 
 
 def checkInput(input, jobid):
