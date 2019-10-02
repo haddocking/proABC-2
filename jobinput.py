@@ -34,7 +34,7 @@ def read_input_single(file, jobid, hmmpath, TargetName):
 
             if isDNA(line):
 
-                write_warning('DNA sequence found in: cd ..' + file + '. Sequence has been translated', jobid)
+                write_warning('DNA sequence found in: {}. Sequence has been translated'.format(file) , jobid)
 
                 line = Seq(line.replace("\n", ""))
                 # Translate sequence using biopython
@@ -100,7 +100,7 @@ def read_input_single(file, jobid, hmmpath, TargetName):
 
                 aligned = align(searchInputName, heavy_hmm, hmmpath, jobid, alignOutputName, TargetName, header)
                 if not aligned:
-                    message = 'Alignment failed for chain H:\n' + line + '\n'
+                    message = 'Alignment failed for chain H:\n' + line
                     write_error(message, jobid)
                 isotype = 'H'
 
@@ -197,8 +197,7 @@ def get_germline(jobid, ig_database, chain, germfile):
 
     if errors:
         write_error('Error in calculating the germline of {}'.format(germfile) , jobid)
-        for error in errors:
-            write_error(error, jobid)
+
 
     with open(germfile) as f:
         line = f.read().split('\n')[11].split('|')
