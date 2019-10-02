@@ -1,6 +1,5 @@
 import subprocess as sub
 import string
-import sys
 import re
 import os
 from ParseHmmer import readhmmsearch, read_align
@@ -34,6 +33,8 @@ def read_input_single(file, jobid, hmmpath, TargetName):
                 write_error('Not allowed characters in ' + file[0:5] + ' chain. Please check your input file\n', jobid)
 
             if isDNA(line):
+
+                write_warning('DNA sequence found in: cd ..' + file + '. Sequence has been translated', jobid)
 
                 line = Seq(line.replace("\n", ""))
                 # Translate sequence using biopython
@@ -246,8 +247,6 @@ def BothChains(session, jobid):
     for key in session:
 
         count = count + 1
-        TargetName = jobid.replace("../jobs/","")
-        TargetName = TargetName.replace("/", "_") + str(count)
 
         if (session[key]['H'] and session[key]['L']) or (session[key]['H'] and session[key]['K']):
 
@@ -315,10 +314,10 @@ def write_error(message, jobid):
         fhErr.write('{}\n'.format(message))
     raise SystemExit('An error occurred. Check error.log file')
 
-#def write_warning(message, jobid):
-   # """Open warning.log and write message"""
-    #with open(jobid + 'warnings.log', 'a') as fhWar:
-     #   fhWar.write(message)
+def write_warning(message, jobid):
+    """Open warning.log and write message"""
+    with open(jobid + 'warnings.log', 'a') as fhWar:
+        fhWar.write('{}\n'.format(message))
 
 
 def checkInput(input, jobid):
@@ -358,28 +357,28 @@ def checkInput(input, jobid):
                             line=line.upper()
                             seq = seq + line
                         else:
-                            message = 'Missing header at the beginning of the input file. Please check your sequence\n'
+                            message = 'Missing header at the beginning of the input file. Please check your sequence'
                             write_error(message, jobid)
             if seq:
                 mysequences.append(seq)
 
             if len(myheaders) != len(mysequences):
-                message = 'Different number of headers and sequences. Please check your input file.\n'
+                message = 'Different number of headers and sequences. Please check your input file'
                 write_error(message, jobid)
 
             if len(myheaders) > 1:
-                message = 'More than one header present in ' + input + ' file. Please check your input file\n'
+                message = 'More than one header present in ' + input + ' file. Please check your input file'
                 write_error(message, jobid)
             
             if len(mysequences) > 1:
-                message = 'More than one sequences present in ' + input + ' file. Please check your input file\n'
+                message = 'More than one sequences present in ' + input + ' file. Please check your input file'
                 write_error(message, jobid)
 
             for i in mysequences:
                 violations = [char for char in i if char not in validChars]
                 if len(violations) > 0:
                     inval = " ".join(violations)
-                    message = 'Invalid character(s) ' + inval + ' in sequence:\n ' + i + '\nPlease check your input file.'
+                    message = 'Invalid character(s) ' + inval + ' in sequence:\n ' + i + '\nPlease check your input file'
                     write_error(message, jobid)
 
 
