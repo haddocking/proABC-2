@@ -303,6 +303,11 @@ def checkInput(input, jobid):
     # check if input file exists
     if os.path.isfile(jobid + input):
 
+        # check if it is an empty file
+        if os.stat(jobid + input).st_size == 0:
+            message = 'File {} is empty. Please check your input'.format(input)
+            write_error(message, jobid)
+
         with open(jobid + input) as fhIn:
 
             for line in fhIn:
@@ -310,42 +315,38 @@ def checkInput(input, jobid):
                 line = line.rstrip('\n')
                 line = line.rstrip('\r')
                 line = line.rstrip()
-                # if line not blank
-                if line:
-                    # check if line is a header
-                    matchObj = re.match("(>\S+)", line)
 
-                    if matchObj:
-                        head = matchObj.group(1)
-                        myheaders.append(head)
-                        flag =1
-                        if seq:
-                            mysequences.append(seq)
-                            seq = ''
-
-                        # check if line is only composed of alphabet characters
+                # check if line is a header
+                matchObj = re.match("(>\S+)", line)
+                if matchObj:
+                    head = matchObj.group(1)
+                    myheaders.append(head)
+                    flag =1
+                    if seq:
+                        mysequences.append(seq)
+                        seq = ''
+                else:
+                    if flag:
+                        line=line.upper()
+                        seq = seq + line
                     else:
-                        if flag:
-                            line=line.upper()
-                            seq = seq + line
-                        else:
-                            message = 'Missing header at the beginning of the input file. Please check your sequence'
-                            write_error(message, jobid)
+                        message = 'Missing header at the beginning of the {} file. Please check your sequence'.format(input)
+                        write_error(message, jobid)
+
             if seq:
                 mysequences.append(seq)
 
-            if len(myheaders) != len(mysequences):
-                message = 'Different number of headers and sequences. Please check your input file'
+            # Check if something rather than an header is provided
+            if len(mysequences) == 0:
+                message = 'No sequence present in {} file. Please check your input file'.format(input)
                 write_error(message, jobid)
 
+            # Check number of headers
             if len(myheaders) > 1:
-                message = 'More than one header present in ' + input + ' file. Please check your input file'
-                write_error(message, jobid)
-            
-            if len(mysequences) > 1:
-                message = 'More than one sequences present in ' + input + ' file. Please check your input file'
+                message = 'More than one header present in {} file. Please check your input file'.format(input)
                 write_error(message, jobid)
 
+            # check if line is only composed of alphabet characters
             for i in mysequences:
                 violations = [char for char in i if char not in validChars]
                 if len(violations) > 0:
