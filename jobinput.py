@@ -1,5 +1,4 @@
 import subprocess as sub
-import string
 import re
 import os
 from ParseHmmer import readhmmsearch, read_align
@@ -10,7 +9,6 @@ def read_input_single(file, jobid, hmmpath, TargetName):
     """Read input file. Check if sequence is a protein or a nucleotide. Scan and align the sequences.
     Return a dictionary with sequence header as key and heavy and light chain as sequences.
     """
-    invalidChars = string.punctuation
     thr = float(10e-40)
     aligned = ''
     isotype = ''
@@ -27,9 +25,6 @@ def read_input_single(file, jobid, hmmpath, TargetName):
             header = line.replace('>', '')
 
         else:
-
-            if any(char in invalidChars for char in line):
-                write_error('Not allowed characters in ' + file[0:5] + ' chain. Please check your input file\n', jobid)
 
             if isDNA(line):
 
@@ -81,7 +76,7 @@ def read_input_single(file, jobid, hmmpath, TargetName):
 
             if (evalueH > thr) and (evalueK > thr) and (evalueL > thr):
 
-                message = 'Your input sequence has not been recognized as an antibody. Please check your input:{}'.format(header)
+                message = 'Your input sequence has not been recognized as an antibody. Please check your input: {}'.format(header)
                 write_error(message, jobid)
 
             if (evalueH < thr and evalueK < thr) or (evalueH < thr and evalueL < thr):
@@ -94,8 +89,8 @@ def read_input_single(file, jobid, hmmpath, TargetName):
                 if file == 'light_format.fasta':
                     warn = "Heavy chain found when light expected"
                     write_error(warn, jobid)
-
                 aligned = align(searchInputName, heavy_hmm, hmmpath, jobid, alignOutputName, TargetName, header)
+
                 if not aligned:
                     message = 'Alignment failed for chain H:\n' + line
                     write_error(message, jobid)
@@ -106,6 +101,7 @@ def read_input_single(file, jobid, hmmpath, TargetName):
                     warn = "Kappa chain found when heavy expected."
                     write_error(warn, jobid)
                 aligned = align(searchInputName, kapp_hmm, hmmpath, jobid, alignOutputName, TargetName, header)
+
                 if not aligned:
                     message = 'Alignment failed for chain L:\n' + line + '\n'
                     write_error(message, jobid)
@@ -116,6 +112,7 @@ def read_input_single(file, jobid, hmmpath, TargetName):
                     warn = "Lambda chain found when heavy expected."
                     write_error(warn, jobid)
                 aligned = align(searchInputName, lambda_hmm, hmmpath, jobid, alignOutputName, TargetName, header)
+
                 if not aligned:
                     message = 'Alignment failed for chain L:\n' + line + '\n'
                     write_error(message, jobid)
@@ -300,59 +297,58 @@ def checkInput(input, jobid):
     validChars = ["A", "C", "G", "T", "R", "V", "W", "P", "F", "Q", "N", 
                   "Y", "H", "S", "I", "M", "D", "E", "L", "K", "X"]
 
-    # check if input file exists
-    if os.path.isfile(jobid + input):
+    file_tocheck = os.path.join(jobid, input)
 
-        # check if it is an empty file
-        if os.stat(jobid + input).st_size == 0:
-            message = 'File {} is empty. Please check your input'.format(input)
+    # check if it is an empty file
+    if os.stat(file_tocheck).st_size == 0:
+        message = 'File {} is empty. Please check your input'.format(input)
+        write_error(message, jobid)
+
+    with open(file_tocheck) as fhIn:
+
+        for line in fhIn:
+
+            line = line.rstrip('\n')
+            line = line.rstrip('\r')
+            line = line.rstrip()
+
+            # check if line is a header
+            matchObj = re.match("(>\S+)", line)
+            if matchObj:
+                head = matchObj.group(1)
+                myheaders.append(head)
+                flag =1
+                if seq:
+                    mysequences.append(seq)
+                    seq = ''
+            else:
+                if flag:
+                    line=line.upper()
+                    seq = seq + line
+                else:
+                    message = 'Missing header at the beginning of the {} file. Please check your input.'.format(input)
+                    write_error(message, jobid)
+
+        if seq:
+            mysequences.append(seq)
+
+        # Check if something rather than an header is provided
+        if len(mysequences) == 0:
+            message = 'No sequence present in {} file. Please check your input file'.format(input)
             write_error(message, jobid)
 
-        with open(jobid + input) as fhIn:
+        # Check number of headers
+        if len(myheaders) > 1:
+            message = 'More than one header present in {} file. Please check your input file'.format(input)
+            write_error(message, jobid)
 
-            for line in fhIn:
-
-                line = line.rstrip('\n')
-                line = line.rstrip('\r')
-                line = line.rstrip()
-
-                # check if line is a header
-                matchObj = re.match("(>\S+)", line)
-                if matchObj:
-                    head = matchObj.group(1)
-                    myheaders.append(head)
-                    flag =1
-                    if seq:
-                        mysequences.append(seq)
-                        seq = ''
-                else:
-                    if flag:
-                        line=line.upper()
-                        seq = seq + line
-                    else:
-                        message = 'Missing header at the beginning of the {} file. Please check your input.'.format(input)
-                        write_error(message, jobid)
-
-            if seq:
-                mysequences.append(seq)
-
-            # Check if something rather than an header is provided
-            if len(mysequences) == 0:
-                message = 'No sequence present in {} file. Please check your input file'.format(input)
+        # check if line is only composed of alphabet characters
+        for i in mysequences:
+            violations = [char for char in i if char not in validChars]
+            if len(violations) > 0:
+                inval = " ".join(violations)
+                message = 'Invalid character(s) ' + inval + ' in sequence:\n ' + i + '\nPlease check your input file'
                 write_error(message, jobid)
-
-            # Check number of headers
-            if len(myheaders) > 1:
-                message = 'More than one header present in {} file. Please check your input file'.format(input)
-                write_error(message, jobid)
-
-            # check if line is only composed of alphabet characters
-            for i in mysequences:
-                violations = [char for char in i if char not in validChars]
-                if len(violations) > 0:
-                    inval = " ".join(violations)
-                    message = 'Invalid character(s) ' + inval + ' in sequence:\n ' + i + '\nPlease check your input file'
-                    write_error(message, jobid)
 
 
 def oneLiner_fasta(jobid, fileIn, fileOut):

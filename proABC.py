@@ -38,7 +38,7 @@ def get_features(jobid, hmmpath, light, heavy, ig_database_H, ig_database_K, ig_
     # Path to executable
     TargetName = jobid.replace('/', '')
 
-    # Check for unknown characters in heavy and light fasta
+    # Check for input in heavy and light fasta
     fhLog.write('Checking input heavy chain sequence\n')
     ji.checkInput(heavy, jobid)
 
