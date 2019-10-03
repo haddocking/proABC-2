@@ -4,7 +4,7 @@ It predicts the antibody residues that will make contact with the antigen and th
 
 # Installation
 
-The easiest way is using anaconda (https://www.anaconda.com/distribution/).
+The easiest way is using *Anaconda* (https://www.anaconda.com/distribution/).
 
 ``` bash
 git clone https://github.com/haddocking/proABC-2.git
@@ -24,6 +24,7 @@ conda dectivate #deactivate enviroment
 #Example:
 python proABC.py Example heavy.fasta light.fasta
 ```
+**proABC 2** also accepts the DNA sequences of the antibody chains and uses the *Biopython Seq module* (https://biopython.org/DIST/docs/api/Bio.Seq-module.html) for the translation into protein sequences.
 
 # Output
 
@@ -46,6 +47,6 @@ They consist of  several columns:
 
 # Requirements
 
-proABC-2 runs on **Python 3.6+** only.
+**proABC-2** runs on **Python 3.6+** only.
 
 Dependencies should be installed via ```conda``` using ```conda env create```
