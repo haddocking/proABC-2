@@ -49,4 +49,4 @@ They consist of  several columns:
 
 **proABC-2** runs on **Python 3.6+** only.
 
-Dependencies should be installed via ```conda``` using ```conda env create```
+Dependencies should be installed via ```conda``` using ```conda env create```.
