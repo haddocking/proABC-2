@@ -1,7 +1,7 @@
 pipeline {
   agent {
     docker {
-      image 'continuumio/anaconda3'
+      image 'continuumio/miniconda3'
     }
 
   }
