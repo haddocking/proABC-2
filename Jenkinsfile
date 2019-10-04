@@ -3,7 +3,6 @@ pipeline {
     docker {
       image 'continuumio/miniconda3'
     }
-
   }
   stages {
     stage('Install') {
