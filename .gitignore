@@ -2,3 +2,6 @@
 __pycache__/
 Example-DNA/
 Example-scAB/
+
+# Files to be ignored
+setup.py
