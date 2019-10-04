@@ -9,7 +9,8 @@ pipeline {
     stage('Install') {
       steps {
         sh '''conda env create
-source activate proABC-2'''
+conda activate proABC-2
+'''
       }
     }
     stage('Test') {
