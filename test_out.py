@@ -5,9 +5,12 @@
 
 import unittest
 import filecmp
-
+import proABC as pr
 
 class TestOut(unittest.TestCase):
+    
+    # Run script to create output		
+    pr.prediction('Example', 'heavy.fasta', 'light.fasta')
 
     """Create testing class"""
 
