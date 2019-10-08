@@ -190,6 +190,7 @@ def get_germline(jobid, ig_database, chain, germfile):
     out, errors = p.communicate()
 
     if errors:
+        print(errors)
         write_error('Error in calculating the germline of {}'.format(germfile) , jobid)
 
 
@@ -280,7 +281,7 @@ def write_error(message, jobid):
     """Open error.log write error and exit job"""
     with open(jobid + 'error.log', 'w') as fhErr:
         fhErr.write('{}\n'.format(message))
-    raise SystemExit(message)
+    raise SystemExit('An error occurred. Check error.log file')
 
 
 def write_warning(message, jobid):
