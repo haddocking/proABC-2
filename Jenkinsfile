@@ -10,8 +10,7 @@ pipeline {
       steps {
         sh '''conda env create
 conda info --envs
-conda activate proABC-2
-'''
+bash -c "conda activate proABC-2"'''
       }
     }
     stage('Test') {
