@@ -17,8 +17,10 @@ pipeline {
         sh '''#!/bin/bash -ex
         source activate proABC-2
         conda info --envs
-        which igblastp'''
+        igblastp -germline_db_V database/IGHVp.fasta -query Example/heavy.fasta -out test
+        cat test'''
       }
     }
   }
 }
+
