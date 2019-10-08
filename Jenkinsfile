@@ -10,8 +10,9 @@ pipeline {
       steps {
         sh '''conda init bash
 . ~/.bashrc
-conda activate proABC-2
 conda env create
+conda info --envs
+conda activate proABC-2
 '''
       }
     }
