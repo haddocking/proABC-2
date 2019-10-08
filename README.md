@@ -1,3 +1,4 @@
+[![Build Status](http://alembick.science.uu.nl:8080/job/proABC-2/job/master/badge/icon)](http://alembick.science.uu.nl:8080/job/proABC-2/job/master/)
 # proABC-2
 
 It predicts the antibody residues that will make contact with the antigen and the type of interaction using a **convolutional neural network (CNN)**.
