@@ -14,7 +14,7 @@ pipeline {
         export PATH="$HOME/miniconda/bin:$PATH"
         hash -r
         conda config --set always_yes yes --set changeps1 no
-        conda update -q cond
+        conda update -q conda
         conda env create
         conda activate proABC-2
 '''
