@@ -280,7 +280,7 @@ def write_error(message, jobid):
     """Open error.log write error and exit job"""
     with open(jobid + 'error.log', 'w') as fhErr:
         fhErr.write('{}\n'.format(message))
-    raise SystemExit('An error occurred. Check error.log file')
+    raise SystemExit(message)
 
 
 def write_warning(message, jobid):
