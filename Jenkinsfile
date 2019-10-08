@@ -11,13 +11,13 @@ pipeline {
         sh '''conda init bash
 . ~/.bashrc
 conda env create
-        conda activate proABC-2
 '''
       }
     }
     stage('Test') {
       steps {
-        sh 'python -m unittest discover'
+        sh '''conda activate proABC-2
+python -m unittest discover'''
       }
     }
   }
