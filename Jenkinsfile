@@ -10,7 +10,6 @@ pipeline {
       steps {
         sh '''
         conda env create
-        conda update -n base -c defaults conda
         conda activate proABC-2
 '''
       }
