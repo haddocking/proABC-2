@@ -8,8 +8,8 @@ pipeline {
   stages {
     stage('Install') {
       steps {
-         sh 'conda clean --index-cache'
-         sh '''conda env create --quiet'''
+        sh 'conda clean --index-cache'
+        sh 'conda env create --quiet'
       }
     }
     stage('Test') {
@@ -22,6 +22,10 @@ pipeline {
         '''
       }
     }
+    stage('Slack message') {
+      steps {
+        slackSend(channel: 'proabc', color: 'good', message: '*${currentBuild.currentResult}:* Job ${env.JOB_NAME} build ${env.BUILD_NUMBER}\\n More info at: ${env.BUILD_URL}')
+      }
+    }
   }
 }
-
