@@ -9,15 +9,15 @@ pipeline {
     stage('Install') {
       steps {
          sh 'conda clean --index-cache'
-         sh 'conda env create'
+         sh '''conda env create'''
       }
     }
     stage('Test') {
       steps {
-        sh '#!/bin/bash -ex
+        sh '''#!/bin/bash -ex
         conda info --envs
         source activate proABC-2
-        python -m unittest discover'
+        python -m unittest discover'''
       }
     }
   }
