@@ -17,7 +17,7 @@ pipeline {
         sh '''#!/bin/bash -ex
         source activate proABC-2
         conda info --envs
-        python proABC.py Example/ heavy.fasta light.fasta'''
+        which igblastp'''
       }
     }
   }
