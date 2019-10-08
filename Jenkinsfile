@@ -10,15 +10,14 @@ pipeline {
       steps {
          sh 'conda clean --index-cache'
          sh 'conda env create'
-         sh '''#!/bin/bash -ex
-        conda info --envs
-        source activate proABC-2
-        '''
       }
     }
     stage('Test') {
       steps {
-        sh 'python -m unittest discover'
+        sh '#!/bin/bash -ex
+        conda info --envs
+        source activate proABC-2
+        python -m unittest discover'
       }
     }
   }
