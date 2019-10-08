@@ -8,18 +8,15 @@ pipeline {
   stages {
     stage('Install') {
       steps {
-        sh '''conda init bash
-. ~/.bashrc
-conda env create
+        sh '''conda env create
 conda info --envs
-
+conda activate proABC-2
 '''
       }
     }
     stage('Test') {
       steps {
-        sh '''conda activate proABC-2
-python -m unittest discover'''
+        sh 'python -m unittest discover'
       }
     }
   }
