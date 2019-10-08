@@ -9,8 +9,7 @@ pipeline {
     stage('Install') {
       steps {
         sh '''
-        conda init bash
-        bash ~/.bashrc
+        export PATH="$HOME/miniconda/bin:$PATH"
         conda env create
         conda activate proABC-2
 '''
