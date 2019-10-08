@@ -9,13 +9,12 @@ import proABC as pr
 
 class TestOut(unittest.TestCase):
 
-    # Run script to create output
-    pr.prediction('Example', 'heavy.fasta', 'light.fasta')
-
     """Create testing class"""
 
     def setUp(self):
 
+        # Run script to create output
+        pr.prediction('Example', 'heavy.fasta', 'light.fasta')
         self.golden_feat = 'Test_data/Example-features.csv'
         self.golden_pred_h = 'Test_data/heavy-pred.csv'
         self.golden_pred_l = 'Test_data/light-pred.csv'
