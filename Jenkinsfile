@@ -10,7 +10,7 @@ pipeline {
       steps {
         sh '''
         conda env create
-        activate proABC-2
+        source activate proABC-2
 '''
       }
     }
