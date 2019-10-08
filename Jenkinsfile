@@ -3,6 +3,7 @@ pipeline {
     docker {
       image 'continuumio/miniconda3'
     }
+
   }
   stages {
     stage('Install') {
@@ -19,14 +20,8 @@ pipeline {
         export KMP_WARNINGS=noverbose
         python proABC.py Example heavy.fasta light.fasta
         '''
-        }
-     }
-    stage('Slack Message') {
-       steps {
-         slackSend channel: '#proabc_2',
-         color: 'good',
-         message: "*${currentBuild.currentResult}:* Job ${env.JOB_NAME} build ${env.BUILD_NUMBER}\n More info at: ${env.BUILD_URL}"
-       }
+      }
     }
+  }
 }
 
