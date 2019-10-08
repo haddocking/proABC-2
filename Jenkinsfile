@@ -18,8 +18,6 @@ pipeline {
       steps {
         sh '''#!/bin/bash -ex
         source activate proABC-2
-        conda install -c conda-forge codecov
-        conda install -c anaconda coverage
         export KMP_WARNINGS=noverbose
         python -m coverage run -m unittest discover
         export CODECOV_TOKEN=686a06a1-4987-462a-bad5-650f80db5866
