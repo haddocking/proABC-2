@@ -18,7 +18,7 @@ pipeline {
         source activate proABC-2
         conda info --envs
         export KMP_WARNINGS=noverbose
-        python proABC.py Example heavy.fasta light.fasta
+        python -m unittest discover
         '''
       }
     }
