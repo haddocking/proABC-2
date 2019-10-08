@@ -17,7 +17,8 @@ pipeline {
         sh '''#!/bin/bash -ex
         conda info --envs
         source activate proABC-2
-        python -m unittest discover'''
+        python -m unittest discover
+        cat Example/error.log'''
       }
     }
   }
