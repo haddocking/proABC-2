@@ -1,15 +1,14 @@
 pipeline {
-  agent {
-    docker {
-      image 'continuumio/miniconda3'
-    }
-
-  }
+  agent none
   stages {
     stage('Install') {
       steps {
-        sh '''
-        conda env create
+        sh '''wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh;bash miniconda.sh -b -p $HOME/miniconda
+export PATH="$HOME/miniconda/bin:$PATH"
+hash -r
+conda config --set always_yes yes --set changeps1 no
+conda info -a
+conda env create
         conda activate proABC-2
 '''
       }
