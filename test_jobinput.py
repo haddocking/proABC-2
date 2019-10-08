@@ -6,6 +6,7 @@
 import unittest
 import jobinput as ji
 import os as os
+import numbering as nu
 
 class TestJi(unittest.TestCase):
 
@@ -29,6 +30,9 @@ class TestJi(unittest.TestCase):
         self.golden_l = 'DIQMTQSPSSLSASVGDRVTITCSASQDIS----------NYLNWYQQKPGKAPKVLIYF--------TSSLHSGVPSRFSGSGSG--------TDFTLTISSLQPEDFATYYCQQYSTVP--------WTFGQGTKVEIKRTV'  # Sequence L
         self.isotype_h = 'H'  # Isotype H
         self.isotype_l = 'K'  # Isotype L
+        self.golden_cs_h = [1, 2, 'bulged']  # Canonical H
+        self.golden_cs_l = [2, 1, 1]  # Canonical L
+
 
     def test_readInput(self):
 
@@ -59,6 +63,18 @@ class TestJi(unittest.TestCase):
 
         # Remove tmp dir
         os.rmdir(TestJi.jobid + 'tmp/')
+
+    def test_getCs(self):
+        '''Test canonical structures
+        calculation'''
+
+        # Heavy chain
+        cs_h = nu.H(self.golden_h).getCs()
+        self.assertListEqual(self.golden_cs_h, cs_h, "Heavy chain canonical structures are different \n")
+
+        # Light chain
+        cs_l = nu.K(self.golden_l).getCs()
+        self.assertListEqual(self.golden_cs_l, cs_l, "Light chain canonical structures are different \n")
 
 if __name__ == '__main__':
     unittest.main()
