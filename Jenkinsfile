@@ -9,8 +9,12 @@ pipeline {
     stage('Install') {
       steps {
         sh '''
-        conda init bash
-        exec bash
+        export -f conda
+        export -f __conda_activate
+        export -f __conda_reactivate
+        export -f __conda_hashr
+        export -f __add_sys_prefix_to_path
+        eval "$(conda shell.bash hook)
         conda env create
         conda activate proABC-2
 '''
