@@ -20,7 +20,7 @@ pipeline {
         source activate proABC-2
         conda info --envs
         export KMP_WARNINGS=noverbose
-        python test_jobinput.py
+        python -m unittest discover
         '''
       }
     }

@@ -28,23 +28,23 @@ class TestOut(unittest.TestCase):
         # Testing
         self.assertTrue(filecmp.cmp(self.golden_feat, feat), "Features files are different \n")
 
-    def test_pred_h(self):
-        """Test heavy chain predictions"""
-
-        # Ini
-        pred_h = 'Example/heavy-pred.csv'
-
-        # Testing
-        self.assertTrue(filecmp.cmp(self.golden_pred_h, pred_h), "Heavy chain predictions are different \n")
-
-    def test_pred_l(self):
-        """Test light chain predictions"""
-
-        # Ini
-        pred_l = 'Example/light-pred.csv'
-
-        # Testing
-        self.assertTrue(filecmp.cmp(self.golden_pred_l, pred_l), "Light chain predictions are different \n")
+    # def test_pred_h(self):
+    #     """Test heavy chain predictions"""
+    #
+    #     # Ini
+    #     pred_h = 'Example/heavy-pred.csv'
+    #
+    #     # Testing
+    #     self.assertTrue(filecmp.cmp(self.golden_pred_h, pred_h), "Heavy chain predictions are different \n")
+    #
+    # def test_pred_l(self):
+    #     """Test light chain predictions"""
+    #
+    #     # Ini
+    #     pred_l = 'Example/light-pred.csv'
+    #
+    #     # Testing
+    #     self.assertTrue(filecmp.cmp(self.golden_pred_l, pred_l), "Light chain predictions are different \n")
 
 
 if __name__ == '__main__':
