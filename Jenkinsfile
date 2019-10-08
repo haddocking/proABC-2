@@ -9,15 +9,15 @@ pipeline {
     stage('Install') {
       steps {
          sh 'conda clean --index-cache'
-         sh '''conda env create'''
+         sh '''conda env create --quiet'''
       }
     }
     stage('Test') {
       steps {
         sh '''#!/bin/bash -ex
-        conda info --envs
         source activate proABC-2
-        python test_jobinput.py'''
+        conda info --envs
+        python proABC.py Example/ heavy.fasta light.fasta'''
       }
     }
   }
