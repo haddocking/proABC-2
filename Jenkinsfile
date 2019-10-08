@@ -1,7 +1,7 @@
 pipeline {
   agent {
     docker {
-      image 'continuumio/anaconda3'
+      image 'continuumio/miniconda3'
     }
 
   }
@@ -9,9 +9,8 @@ pipeline {
     stage('Install') {
       steps {
         sh '''
-        bash ~/.bashrc
         conda env create
-        conda activate proABC-2
+        activate proABC-2
 '''
       }
     }
