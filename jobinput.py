@@ -190,7 +190,6 @@ def get_germline(jobid, ig_database, chain, germfile):
     out, errors = p.communicate()
 
     if errors:
-        print(errors)
         write_error('Error in calculating the germline of {}'.format(germfile) , jobid)
 
 
