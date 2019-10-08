@@ -12,13 +12,14 @@ pipeline {
 . ~/.bashrc
 conda env create
 conda info --envs
-conda activate proABC-2
+
 '''
       }
     }
     stage('Test') {
       steps {
-        sh 'python -m unittest discover'
+        sh '''conda activate proABC-2
+python -m unittest discover'''
       }
     }
   }
