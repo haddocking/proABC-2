@@ -8,8 +8,9 @@ pipeline {
   stages {
     stage('Install') {
       steps {
-        sh '''conda env create
-conda activate proABC-2'''
+        sh '''#!/bin/bash
+        conda env create
+        conda activate proABC-2'''
       }
     }
     stage('Test') {
