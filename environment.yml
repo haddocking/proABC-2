@@ -50,7 +50,6 @@ dependencies:
   - openssl=1.1.1=h7b6447c_0
   - pandas=0.25.1=py36he6710b0_0
   - perl=5.26.2=h14c3975_0
-  - perl-threaded=5.26.0=0
   - pip=19.2.3=py36_0
   - protobuf=3.9.2=py36he6710b0_0
   - pycparser=2.19=py36_1
