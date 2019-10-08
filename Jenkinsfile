@@ -9,8 +9,8 @@ pipeline {
     stage('Install') {
       steps {
         sh '''
-        conda init $SHELL
-        exec $SHELL
+        conda init bash
+        exec bash
         conda env create
         conda activate proABC-2
 '''
