@@ -10,7 +10,8 @@ pipeline {
       steps {
         sh '''
         conda init bash
-        reset
+        bash /opt/conda/etc/profile.d/conda.csh
+        bash /root/.bashrc
         conda env create
         conda activate proABC-2
 '''
