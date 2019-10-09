@@ -1,6 +1,7 @@
 [![codecov](https://codecov.io/gh/haddocking/proABC-2/branch/master/graph/badge.svg?token=4C4tfGxpuQ)](https://codecov.io/gh/haddocking/proABC-2) [![Build Status](http://alembick.science.uu.nl:8080/buildStatus/icon?job=proABC-2%2Fmaster&subject=Build%20duration:%20%24%7Bduration%7D)](http://alembick.science.uu.nl:8080/job/proABC-2/job/master/)
 # proABC-2
 
+![alt text](https://github.com/haddocking/proABC-2/blob/master/logo/logo.png)
 
 It predicts the antibody residues that will make contact with the antigen and the type of interaction using a **convolutional neural network (CNN)**.
 

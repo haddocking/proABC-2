@@ -5,6 +5,8 @@ Example-scAB/
 
 # Files to be ignored
 setup.py
+Test_data/heavy_test.fasta
+Test_data/light_test.fasta
 Test_data/Test_data-features.csv
 Test_data/alignments/
 Test_data/heavy.germ
