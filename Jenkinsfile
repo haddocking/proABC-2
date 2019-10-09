@@ -7,9 +7,8 @@ pipeline {
     }
 
   }
-  stages {
-
-    try {
+   try {
+   stages {
     stage('Install') {
       steps {
         sh 'conda clean --index-cache'
