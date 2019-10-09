@@ -3,7 +3,7 @@
 
 ![alt text](https://github.com/haddocking/proABC-2/blob/master/logo/logo.png)
 
-It predicts the antibody residues that will make contact with the antigen and the type of interaction using a **convolutional neural network (CNN)**.
+It predicts the antibody residues that will make contact with the antigen and the type of interaction using a **Convolutional Neural Network (CNN)**.
 
 # Installation
 
