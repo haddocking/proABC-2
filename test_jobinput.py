@@ -41,7 +41,7 @@ class TestJi(unittest.TestCase):
         self.gold_len_l_l = [11, 3, 8]  # L (Lambda) 2kdm
 
         # Canonical structures
-        self.golden_cs_h = [1, 2, 'bulged']  # Canonical H 1bj1
+        self.golden_cs_h = [1, 2, 'bulg']  # Canonical H 1bj1
         self.golden_cs_k = [2, 1, 1]  # Canonical (Kappa) 1bj1
         self.golden_cs_l = [6, 1, 1]  # Canonical (Lamba) 3kdm
 
