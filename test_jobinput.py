@@ -77,7 +77,7 @@ class TestJi(unittest.TestCase):
 
     def test_loopLen(self):
 
-        '''Test lenght calculation of the HV loops'''
+        '''Test length calculation of the HV loops'''
 
         # Heavy chain
         len_h = list(nu.H(self.golden_h).loopLen().values())
