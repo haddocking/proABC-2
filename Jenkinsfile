@@ -7,7 +7,7 @@ pipeline {
     }
 
   }
-  node {
+  stages {
     try {
 
         stage('Install') {
