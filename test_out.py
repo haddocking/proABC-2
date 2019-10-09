@@ -6,6 +6,7 @@
 import unittest
 import filecmp
 import proABC as pr
+import os as os
 
 class TestOut(unittest.TestCase):
 
@@ -13,11 +14,28 @@ class TestOut(unittest.TestCase):
 
     def setUp(self):
 
+        # Input
+        # igblastp database for heavy Kappa and Light chain
+        base_dir = os.path.dirname(__file__)
+        ig_database_H = os.path.join(base_dir, 'database', 'IGHVp.fasta')
+        ig_database_K = os.path.join(base_dir, 'database', 'IGKVp.fasta')
+        ig_database_L = os.path.join(base_dir, 'database', 'IGLVp.fasta')
+
+        # only needed if you want to specify the path for HMMER
+        hmmpath = ''
+        jobid = 'Test_data/'
+        light = 'light.fasta'
+        heavy = 'heavy.fasta'
+
+        # Open file log
+        open(os.path.join(jobid, 'test.log'), 'w').close()  # create empty file
+        log = open(os.path.join(jobid, 'test.log'), 'a')
+
         # Run script to create output
-        pr.prediction('Example', 'heavy.fasta', 'light.fasta')
-        self.golden_feat = 'Test_data/Example-features.csv'
-        self.golden_pred_h = 'Test_data/heavy-pred.csv'
-        self.golden_pred_l = 'Test_data/light-pred.csv'
+        pr.get_features(jobid, hmmpath, light, heavy, ig_database_H, ig_database_K, ig_database_L, log)
+        self.golden_feat = 'Test_data/Test-features.csv'
+        log.close()
+
 
     def test_features(self):
         """Test features files"""
@@ -27,25 +45,6 @@ class TestOut(unittest.TestCase):
 
         # Testing
         self.assertTrue(filecmp.cmp(self.golden_feat, feat), "Features files are different \n")
-
-    # def test_pred_h(self):
-    #     """Test heavy chain predictions"""
-    #
-    #     # Ini
-    #     pred_h = 'Example/heavy-pred.csv'
-    #
-    #     # Testing
-    #     self.assertTrue(filecmp.cmp(self.golden_pred_h, pred_h), "Heavy chain predictions are different \n")
-    #
-    # def test_pred_l(self):
-    #     """Test light chain predictions"""
-    #
-    #     # Ini
-    #     pred_l = 'Example/light-pred.csv'
-    #
-    #     # Testing
-    #     self.assertTrue(filecmp.cmp(self.golden_pred_l, pred_l), "Light chain predictions are different \n")
-
 
 if __name__ == '__main__':
     unittest.main()
