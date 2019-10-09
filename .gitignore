@@ -10,3 +10,4 @@ Test_data/alignments/
 Test_data/heavy.germ
 Test_data/light.germ
 Test_data/test.log
+save-git-pass.sh
