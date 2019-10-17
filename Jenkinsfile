@@ -1,4 +1,4 @@
-def COLOR_MAP = ['SUCCESS': 'good', 'FAILURE': 'danger', 'UNSTABLE': '#FF8C00', 'ABORTED': '#808080']
+def COLOR_MAP = ['SUCCESS': 'good', 'FAILURE': 'danger', 'STARTED': '#FF8C00', 'ABORTED': '#808080']
 
 pipeline {
   agent {
@@ -8,6 +8,17 @@ pipeline {
   }
 
   stages {
+
+    stage ('Slack notification') {
+        steps{
+        slackSend(channel: 'proabc_2',
+        color: COLOR_MAP[currentBuild.currentResult],
+        message: "*STARTED:* Job ${env.JOB_NAME} build ${env.BUILD_NUMBER}\nMore info at: ${env.BUILD_URL}")
+        }
+
+    }
+
+
     stage('Install') {
       steps {
         sh 'conda clean --index-cache'
