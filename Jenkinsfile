@@ -12,7 +12,7 @@ pipeline {
     stage ('Slack notification') {
         steps{
         slackSend(channel: 'proabc_2',
-        color: COLOR_MAP[currentBuild.currentResult],
+        color: COLOR_MAP['STARTED'],
         message: "*STARTED:* Job ${env.JOB_NAME} build ${env.BUILD_NUMBER}\nMore info at: ${env.BUILD_URL}")
         }
 
