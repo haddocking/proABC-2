@@ -47,7 +47,7 @@ def readhmmsearch(file):
 
 '''
 
-def read_align(file, header, jobid):
+def read_align(file):
 
     aligned = ""
 
@@ -61,7 +61,7 @@ def read_align(file, header, jobid):
         for line in handle:
             ''' file '''
 
-            if re.match('\w', line):
+            if not line.startswith('#') and not line.startswith('\n') and not line.startswith('//'):
                 split = line.split()
                 aligned = aligned + split[1]
                 '''Check if alignment failed'''
@@ -70,10 +70,6 @@ def read_align(file, header, jobid):
                 split = line.split()
 
                 if re.search('\.', split[2]):
-  
-                    #print alignment failed for ' + header + '\n'
-                    message = ('alignment failed for ' + header + '\n')
-                    #js.writeWarning(message, jobid)
                     aligned =''
                     break
 

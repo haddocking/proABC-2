@@ -67,11 +67,11 @@ def read_input_single(file, jobid, hmmpath, TargetName):
                 write_error(message, jobid)
 
             if not evalueK:
-                message = 'Alignment failed for chain L:\n' + line
+                message = 'Alignment failed for chain L (Kappa):\n' + line
                 write_error(message, jobid)
 
             if not evalueL:
-                message = 'Alignment failed for chain L:\n' + line
+                message = 'Alignment failed for chain L (Lambda):\n' + line
                 write_error(message, jobid)
 
             if (evalueH > thr) and (evalueK > thr) and (evalueL > thr):
@@ -218,7 +218,7 @@ def align(searchInputName, hmm, hmmpath, jobid, alignOutputName, TargetName, hea
         write_error(errors, jobid)
 
     # Parsing alignment file
-    aligned = read_align(alignOutputName, TargetName, jobid)
+    aligned = read_align(alignOutputName)
 
     fhIn.close()
     return (aligned)
