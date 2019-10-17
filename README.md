@@ -1,4 +1,7 @@
-[![codecov](https://codecov.io/gh/haddocking/proABC-2/branch/master/graph/badge.svg?token=4C4tfGxpuQ)](https://codecov.io/gh/haddocking/proABC-2) [![Build Status](http://alembick.science.uu.nl:8080/buildStatus/icon?job=proABC-2%2Fmaster&subject=Build%20duration:%20%24%7Bduration%7D)](http://alembick.science.uu.nl:8080/job/proABC-2/job/master/)
+[![License](https://img.shields.io/badge/License-Apache%202.0-yellowgreen.svg)](https://opensource.org/licenses/Apache-2.0) 
+[![codecov](https://codecov.io/gh/haddocking/proABC-2/branch/master/graph/badge.svg?token=4C4tfGxpuQ)](https://codecov.io/gh/haddocking/proABC-2) 
+[![Build Status](http://alembick.science.uu.nl:8080/buildStatus/icon?job=proABC-2%2Fmaster&subject=Build%20duration:%20%24%7Bduration%7D)](http://alembick.science.uu.nl:8080/job/proABC-2/job/master/) 
+  
 # proABC-2
 
 ![alt text](https://github.com/haddocking/proABC-2/blob/master/logo/logo.png)
