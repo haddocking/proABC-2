@@ -1,7 +1,7 @@
 import subprocess as sub
 import re
 import os
-from ParseHmmer import readhmmsearch, read_align
+from ParseHmmer import readhmmscan, read_align
 from Bio.Seq import Seq
 
 
@@ -162,7 +162,7 @@ def isProtein(seq):
 def scan(searchInputName, hmm, hmmpath, jobid, searchOutputName):
     """Scan sequence with HMM"""
 
-    # run hmmsearch exacutable
+    # run hmmscan exacutable
     command = [hmmpath + 'hmmscan', '--domtblout', searchOutputName, hmm, searchInputName]
 
     # run hmmscan
@@ -173,8 +173,8 @@ def scan(searchInputName, hmm, hmmpath, jobid, searchOutputName):
         # write errors
         write_error(errors, jobid)
 
-    # parse hmmsearch output file
-    score = readhmmsearch(searchOutputName)
+    # parse hmmscan output file
+    score = readhmmscan(searchOutputName)
 
     return(score)
 
