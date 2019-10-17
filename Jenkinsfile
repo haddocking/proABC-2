@@ -1,4 +1,4 @@
-def COLOR_MAP = ['SUCCESS': 'good', 'FAILURE': 'danger', 'STARTED': '#FF8C00', 'ABORTED': '#808080']
+def COLOR_MAP = ['STARTED': '#3399FF', 'SUCCESS': 'good', 'FAILURE': 'danger', 'UNSTABLE': '#FF8C00', 'ABORTED': '#808080']
 
 pipeline {
   agent {
