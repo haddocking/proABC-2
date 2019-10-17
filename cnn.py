@@ -94,11 +94,11 @@ def give_score(a_array, score_dic, add_position=0):
 
 
 """Model"""
-def create_ParaNet_v3(hps):
-    """Creates the model 'ParaNet_v3' and initializes it."""
-    class ParaNet_v3(Model):
+def create_proABC_v2(hps):
+    """Creates the model 'proABC_v2' and initializes it."""
+    class proABC_v2(Model):
         def __init__(self, hps):
-            super(ParaNet_v3, self).__init__()
+            super(proABC_v2, self).__init__()
             self.conv11 = Conv1D(filters=32, kernel_size=3, strides=1, activation='elu')
             self.maxpool11 = MaxPooling1D(pool_size=10, strides=3)
             self.dropout11 = Dropout(0.15)
@@ -129,7 +129,7 @@ def create_ParaNet_v3(hps):
             x1 = self.dropout3(self.d1(x1))
             return self.d2(x1)
 
-    model = ParaNet_v3(hps)
+    model = proABC_v2(hps)
     model.compile(loss=[focal_loss()], metrics=['accuracy'],
               optimizer='sgd')
 
@@ -161,15 +161,15 @@ def predict(out, hps, model_name, x_data):
     # The out of the model is a numpy array of length 297 * (number of predicted interactions)
     y_target = np.zeros((1, out), dtype=int)
     tf.keras.backend.clear_session()
-    ParaNet_model = create_ParaNet_v3(hps)
+    proABC_model = create_proABC_v2(hps)
 
     #  Initialize the model with random weights
-    ParaNet_model.fit(x_data, y_target, epochs=1, verbose=0)
+    proABC_model.fit(x_data, y_target, epochs=1, verbose=0)
 
     # Load in the correct weights from a trained model
-    ParaNet_model.load_weights(model_name)
+    proABC_model.load_weights(model_name)
 
     # Make predictions
-    y_pred = ParaNet_model.predict(x_data)
+    y_pred = proABC_model.predict(x_data)
 
     return y_pred
