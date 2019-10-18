@@ -1,13 +1,13 @@
 import warnings
 import os
-warnings.filterwarnings("ignore")
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 import numpy as np
 import pandas as pd
 import tensorflow as tf
 from tensorflow.keras.layers import Conv1D, MaxPooling1D, Dropout, Flatten, Dense
 from tensorflow.keras import Model
 from tensorflow.keras import backend as K
+warnings.filterwarnings("ignore")
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
 """Data processing"""
 
@@ -92,7 +92,6 @@ def give_score(a_array, score_dic, add_position=0):
         return np.array([np.array([score_dic[j]+[num/len(i)] for num, j in enumerate(i)]) for i in a_array])
 
 
-
 """Model"""
 def create_proABC_v2(hps):
     """Creates the model 'proABC_v2' and initializes it."""
@@ -117,7 +116,7 @@ def create_proABC_v2(hps):
 
         def call(self, x):
             x1, x2 = x
-            x11, x12 = x1[:,:153], x1[:,153:]
+            x11, x12 = x1[:, :153], x1[:, 153:]
 
             x11 = self.dropout11(self.maxpool11(self.conv11(x11)))
             x12 = self.dropout12(self.maxpool12(self.conv12(x12)))
@@ -130,8 +129,7 @@ def create_proABC_v2(hps):
             return self.d2(x1)
 
     model = proABC_v2(hps)
-    model.compile(loss=[focal_loss()], metrics=['accuracy'],
-              optimizer='sgd')
+    model.compile(loss=[focal_loss()], metrics=['accuracy'], optimizer='sgd')
 
     return model
 
@@ -148,7 +146,7 @@ def focal_loss(gamma=4, alpha=.2, mask_val=-1):
         y_pred = tf.clip_by_value(y_pred, tf.keras.backend.epsilon(), 1 - tf.keras.backend.epsilon())
         pt_1 = tf.where(tf.equal(y_true, 1), y_pred, tf.ones_like(y_pred))
         pt_0 = tf.where(tf.equal(y_true, 0), y_pred, tf.zeros_like(y_pred))
-        loss = -K.sum(alpha * K.pow(1. - pt_1, gamma) * K.log(pt_1))-K.sum((1 - alpha) * K.pow( pt_0, gamma) * K.log(1. - pt_0))
+        loss = -K.sum(alpha * K.pow(1. - pt_1, gamma) * K.log(pt_1))-K.sum((1 - alpha) * K.pow(pt_0, gamma) * K.log(1. - pt_0))
         return loss / tf.reduce_sum(y_true)
         # return loss
     return focal_loss_fixed

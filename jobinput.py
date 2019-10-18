@@ -28,7 +28,7 @@ def read_input_single(file, jobid, hmmpath, TargetName):
 
             if isDNA(line):
 
-                write_warning('DNA sequence found in: {}. Sequence has been translated'.format(file) , jobid)
+                write_warning('DNA sequence found in: {}. Sequence has been translated'.format(file), jobid)
 
                 line = Seq(line.replace("\n", ""))
                 # Translate sequence using biopython
@@ -137,7 +137,7 @@ def isDNA(seq):
         if c not in aset:
             nn = 0
 
-    return (nn)
+    return nn
 
 
 def isProtein(seq):
@@ -156,7 +156,7 @@ def isProtein(seq):
 
             pp = 0
 
-    return (pp)
+    return pp
 
 
 def scan(searchInputName, hmm, hmmpath, jobid, searchOutputName):
@@ -176,7 +176,7 @@ def scan(searchInputName, hmm, hmmpath, jobid, searchOutputName):
     # parse hmmscan output file
     score = readhmmscan(searchOutputName)
 
-    return(score)
+    return score
 
 
 def get_germline(jobid, ig_database, chain, germfile):
@@ -190,8 +190,7 @@ def get_germline(jobid, ig_database, chain, germfile):
     out, errors = p.communicate()
 
     if errors:
-        write_error('Error in calculating the germline of {}'.format(germfile) , jobid)
-
+        write_error('Error in calculating the germline of {}'.format(germfile), jobid)
 
     with open(germfile) as f:
         line = f.read().split('\n')[11].split('|')
@@ -199,7 +198,7 @@ def get_germline(jobid, ig_database, chain, germfile):
         germ = re.match("IG\wV\d+", line[1]).group()
         germ_spec = germ + '-' + species
 
-    return(germ_spec)
+    return germ_spec
 
 
 def align(searchInputName, hmm, hmmpath, jobid, alignOutputName, TargetName, header):
@@ -221,7 +220,7 @@ def align(searchInputName, hmm, hmmpath, jobid, alignOutputName, TargetName, hea
     aligned = read_align(alignOutputName)
 
     fhIn.close()
-    return (aligned)
+    return aligned
 
 
 def rmTmpFile(jobid):
@@ -247,15 +246,15 @@ def BothChains(session, jobid):
             fhOut.write(">heavy" + "\n" + session[key]['H'] + '\n')
             fhOut.close()
 
-            OutH.write('>' + key + '\n' + session[key]['H'].replace('-','')+ '\n')
+            OutH.write('>' + key + '\n' + session[key]['H'].replace('-', '') + '\n')
             fhOut = open(jobid + 'alignments/light_' + str(count) + '.fasta', 'w')
 
             if session[key]['K']:
                 fhOut.write(">light" + "\n" + session[key]['K'] + '\n')
-                OutL.write('>' + key + '\n' + session[key]['K'].replace('-','') + '\n')
+                OutL.write('>' + key + '\n' + session[key]['K'].replace('-', '') + '\n')
             else:
                 fhOut.write(">light" + "\n" + session[key]['L'] + '\n')
-                OutL.write('>' + key + '\n' + session[key]['L'].replace('-','') + '\n')
+                OutL.write('>' + key + '\n' + session[key]['L'].replace('-', '') + '\n')
 
             fhOut.close()
 
@@ -273,7 +272,7 @@ def BothChains(session, jobid):
     OutH.close()
     OutL.close()
 
-    return(session)
+    return session
 
 
 def write_error(message, jobid):
@@ -317,13 +316,13 @@ def checkInput(input, jobid):
             if matchObj:
                 head = matchObj.group(1)
                 myheaders.append(head)
-                flag =1
+                flag = 1
                 if seq:
                     mysequences.append(seq)
                     seq = ''
             else:
                 if flag:
-                    line=line.upper()
+                    line = line.upper()
                     seq = seq + line
                 else:
                     message = 'Missing header at the beginning of the {} file. Please check your input.'.format(input)
@@ -354,7 +353,7 @@ def checkInput(input, jobid):
 def oneLiner_fasta(jobid, fileIn, fileOut):
     with open(jobid + fileIn, 'r') as fhIn:
         seq = ''
-        header= ''
+        header = ''
         # read input file
         for line in fhIn:
             # removing new line
@@ -364,8 +363,8 @@ def oneLiner_fasta(jobid, fileIn, fileOut):
                 header = line
             else:
                 # define header as a key unless already in mydict
-                seq =seq + line.upper()
+                seq = seq + line.upper()
 
     # write file in jobpath
-    with open(jobid + fileOut,'w') as fhOut:
+    with open(jobid + fileOut, 'w') as fhOut:
         fhOut.write(header + "\n" + seq + '\n')

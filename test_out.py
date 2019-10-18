@@ -8,6 +8,7 @@ import filecmp
 import proABC as pr
 import os as os
 
+
 class TestOut(unittest.TestCase):
 
     """Create testing class"""
@@ -36,7 +37,6 @@ class TestOut(unittest.TestCase):
         self.golden_feat = 'Test_data/Test-features.csv'
         log.close()
 
-
     def test_features(self):
         """Test features files"""
 
@@ -45,6 +45,7 @@ class TestOut(unittest.TestCase):
 
         # Testing
         self.assertTrue(filecmp.cmp(self.golden_feat, feat), "Features files are different \n")
+
 
 if __name__ == '__main__':
     unittest.main()
