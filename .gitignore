@@ -2,6 +2,7 @@
 __pycache__/
 Example-DNA/
 Example-scAB/
+Error/
 
 # Files to be ignored
 setup.py
