@@ -12,7 +12,8 @@ def read_input_single(file, jobid, hmmpath, TargetName):
     thr = float(10e-40)
     aligned = ''
     isotype = ''
-    handle = open(jobid + file, "r")
+    filename = f'{jobid}{file}'
+    handle = open(filename, "r")
     # can be heavy or light
     header = ''
 
@@ -38,6 +39,11 @@ def read_input_single(file, jobid, hmmpath, TargetName):
                 if not isProtein(line):
                     write_error(header + " includes unknown amino acids. Please check your sequence\n", jobid)
 
+                # replace dna seq with the translated one
+                # it is needed because later it will be used by igblastp
+                new_seq = f'>{header}\n{line}'
+                with open(filename, 'w') as f:
+                    f.write(new_seq)
             else:
                 # check if sequence is protein
                 if not isProtein(line.replace("\n", "")):
@@ -89,7 +95,7 @@ def read_input_single(file, jobid, hmmpath, TargetName):
                 if file == 'light_format.fasta':
                     warn = "Heavy chain found when light expected"
                     write_error(warn, jobid)
-                aligned = align(searchInputName, heavy_hmm, hmmpath, jobid, alignOutputName, TargetName, header)
+                aligned = align(searchInputName, heavy_hmm, hmmpath, jobid, alignOutputName)
 
                 if not aligned:
                     message = 'Alignment failed for chain H:\n' + line
@@ -100,7 +106,7 @@ def read_input_single(file, jobid, hmmpath, TargetName):
                 if file == 'heavy_format.fasta':
                     warn = "Kappa chain found when heavy expected."
                     write_error(warn, jobid)
-                aligned = align(searchInputName, kapp_hmm, hmmpath, jobid, alignOutputName, TargetName, header)
+                aligned = align(searchInputName, kapp_hmm, hmmpath, jobid, alignOutputName)
 
                 if not aligned:
                     message = 'Alignment failed for chain L:\n' + line + '\n'
@@ -111,7 +117,7 @@ def read_input_single(file, jobid, hmmpath, TargetName):
                 if file == 'heavy_format.fasta':
                     warn = "Lambda chain found when heavy expected."
                     write_error(warn, jobid)
-                aligned = align(searchInputName, lambda_hmm, hmmpath, jobid, alignOutputName, TargetName, header)
+                aligned = align(searchInputName, lambda_hmm, hmmpath, jobid, alignOutputName)
 
                 if not aligned:
                     message = 'Alignment failed for chain L:\n' + line + '\n'
@@ -190,18 +196,24 @@ def get_germline(jobid, ig_database, chain, germfile):
     out, errors = p.communicate()
 
     if errors:
-        write_error('Error in calculating the germline of {}'.format(germfile), jobid)
+        write_error('Error in running igblastp for {}'.format(germfile), jobid)
 
     with open(germfile) as f:
-        line = f.read().split('\n')[11].split('|')
-        species = re.match('\w+', line[2]).group()
-        germ = re.match("IG\wV\d+", line[1]).group()
-        germ_spec = germ + '-' + species
+        line = f.read().split('\n')
+        # Raise an error if there are no hits from igblastp
+        if '***** No hits found *****' in line:
+            message = f'No hits found for: {germfile}'
+            write_error(message, jobid)
+
+        match = line[11].split('|')
+        species = re.match('\w+', match[2]).group()
+        germ = re.match("IG\wV\d+", match[1]).group()
+        germ_spec = f'{germ}-{species}'
 
     return germ_spec
 
 
-def align(searchInputName, hmm, hmmpath, jobid, alignOutputName, TargetName, header):
+def align(searchInputName, hmm, hmmpath, jobid, alignOutputName):
     """Align sequence with HMM"""
 
     # hmmalign output file
@@ -233,7 +245,7 @@ def BothChains(session, jobid):
     """Check if input antibodies have both chains"""
     count = 0
 
-    OutH = open(jobid + 'heavy_format.fasta', 'w')
+    OutH = open(jobid + 'heavy_format.fasta', 'w')  # TODO to modify
     OutL = open(jobid + 'light_format.fasta', 'w')
 
     for key in session:

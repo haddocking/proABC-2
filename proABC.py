@@ -18,7 +18,7 @@ import numpy as np
 import copy
 
 
-__author__ = ["Francesco Ambrosetti", "Pier Paolo Olimpieri", 
+__author__ = ["Francesco Ambrosetti", "Pier Paolo Olimpieri",
               "Tobias Hegelund Olsen", "Brian Jimenez-Garcia"]
 
 __email__ = ["ambrosetti.francesco@gmail.com", "pierpaolo.olimpieri@gmail.com",
@@ -46,8 +46,10 @@ def get_features(jobid, hmmpath, light, heavy, ig_database_H, ig_database_K, ig_
     ji.checkInput(light, jobid)
 
     # Write as a single one-line-sequence file
-    ji.oneLiner_fasta(jobid, heavy, 'heavy_format.fasta')
-    ji.oneLiner_fasta(jobid, light, 'light_format.fasta')
+    format_heavy = 'heavy_format.fasta'
+    format_light = 'light_format.fasta'
+    ji.oneLiner_fasta(jobid, heavy, format_heavy)
+    ji.oneLiner_fasta(jobid, light, format_light)
 
     # Generate working folders
     if not os.path.exists(os.path.join(jobid, 'alignments')):
@@ -60,7 +62,7 @@ def get_features(jobid, hmmpath, light, heavy, ig_database_H, ig_database_K, ig_
     myAb = {'input':{'H': '', 'L': '', 'K': ''}}
 
     # Chain H
-    Seq,isotype = ji.read_input_single('heavy_format.fasta', jobid, hmmpath, TargetName)
+    Seq,isotype = ji.read_input_single(format_heavy, jobid, hmmpath, TargetName)
     fhLog.write(heavy +' sequence is ' +  Seq + '\n')
     fhLog.write('Isotype is ' + isotype + '\n')
 
@@ -68,7 +70,7 @@ def get_features(jobid, hmmpath, light, heavy, ig_database_H, ig_database_K, ig_
         myAb['input'][isotype] = Seq
 
     # Chain L
-    Seq, isotype = ji.read_input_single('light_format.fasta', jobid, hmmpath, TargetName)
+    Seq, isotype = ji.read_input_single(format_light, jobid, hmmpath, TargetName)
     fhLog.write(light + ' sequence is ' + Seq + '\n')
     fhLog.write('Isotype is '+ isotype + '\n')
 
@@ -85,7 +87,7 @@ def get_features(jobid, hmmpath, light, heavy, ig_database_H, ig_database_K, ig_
     # Calculate germline for the Heavy chain
     fhLog.write('Calculating germline for heavy chain' '\n')
     germfile_H = os.path.join(jobid, 'heavy.germ')
-    germ_H = ji.get_germline(jobid, ig_database_H, heavy, germfile_H)
+    germ_H = ji.get_germline(jobid, ig_database_H, format_heavy, germfile_H)
 
 
     for ab in session:
@@ -109,11 +111,11 @@ def get_features(jobid, hmmpath, light, heavy, ig_database_H, ig_database_K, ig_
 
         if session[ab]['K']:  # If isotype is K
             isotype = 'K'
-            germ_L = ji.get_germline(jobid, ig_database_K, light, germfile_L)
+            germ_L = ji.get_germline(jobid, ig_database_K, format_light, germfile_L)
 
         elif session[ab]['L']:  # If isotype is L
             isotype = 'L'
-            germ_L = ji.get_germline(jobid, ig_database_L, light, germfile_L)
+            germ_L = ji.get_germline(jobid, ig_database_L, format_light, germfile_L)
 
         method = eval('nb.' + isotype)
         numbL = method(session[ab][isotype])
