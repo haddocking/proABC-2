@@ -2,12 +2,13 @@ import warnings
 import os
 import numpy as np
 import pandas as pd
+warnings.filterwarnings("ignore")
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 import tensorflow as tf
 from tensorflow.keras.layers import Conv1D, MaxPooling1D, Dropout, Flatten, Dense
 from tensorflow.keras import Model
 from tensorflow.keras import backend as K
-warnings.filterwarnings("ignore")
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+
 
 """Data processing"""
 
