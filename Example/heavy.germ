@@ -3,7 +3,7 @@ Database: IGHVp.fasta
 
 
 
-Query= APDB_H
+Query= input
 
 Length=123
                                                                                                       Score     E

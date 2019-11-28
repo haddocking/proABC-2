@@ -3,7 +3,7 @@ Database: IGKVp.fasta
 
 
 
-Query= APDB_L
+Query= input
 
 Length=110
                                                                                                       Score     E

@@ -233,7 +233,7 @@ def prediction(input_path, heavy_fasta_file, light_fasta_file):
         log.write('Initializing model and making predictions\n')
 
         # Define model parameters
-        output_names = ['pt_pred', 'hb_pred', 'hy_pred']  # type of interaction predicted
+        output_names = ['pt', 'hb', 'hy']  # type of interaction predicted
         split = len(output_names)
         tot = len(seq_data[0] * split)  # 297 [len H chain + len L chain] * split
         hps = {'N_BATCH': 50, 'y_out': tot}
@@ -275,6 +275,7 @@ def prediction(input_path, heavy_fasta_file, light_fasta_file):
         # chain H
         df_seq_H.columns = cols
         out_h_ng = df_seq_H[df_seq_H['Sequence'] != '-']  # Remove gaps from the sequence
+        out_h_ng = out_h_ng.round(2)
 
         # write final csv file
         out_h_ng.to_csv(path_or_buf=os.path.join(jobid, 'heavy-pred.csv'))  # chain H
@@ -282,6 +283,7 @@ def prediction(input_path, heavy_fasta_file, light_fasta_file):
         # chain L
         df_seq_L.columns = cols
         out_l_ng = df_seq_L[df_seq_L['Sequence'] != '-']  # Remove gaps from the sequence
+        out_l_ng = out_l_ng.round(2)
 
         # write final csv file
         out_l_ng.to_csv(path_or_buf=os.path.join(jobid, 'light-pred.csv'))  # chain L
