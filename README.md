@@ -30,7 +30,7 @@ conda dectivate #deactivate enviroment
 #Example:
 python proABC.py Example heavy.fasta light.fasta
 ```
-**proABC 2** also accepts the DNA sequences of the antibody chains and uses the *Biopython Seq module* (https://biopython.org/DIST/docs/api/Bio.Seq-module.html) for the translation into protein sequences.
+**proABC-2** also accepts the DNA sequences of the antibody chains and uses the *Biopython Seq module* (https://biopython.org/DIST/docs/api/Bio.Seq-module.html) for the translation into protein sequences.
 
 # Output
 
