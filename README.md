@@ -39,11 +39,11 @@ They consist of  several columns:
 
 * Chothia: position of the residue according to the Chothia numbering scheme
 * Sequence: residue type for each position 
-* pt_pred: probability of making an interaction with the antigen
-* hb_pred: probability of making a hydrogen bonds with the antigen
-* hy_pred: probability of making a hydrophobic interaction with the antigen
+* pt: probability of making a general interaction with the antigen
+* hb: probability of making a hydrogen bonds with the antigen
+* hy: probability of making a hydrophobic interaction with the antigen
 
-| Chothia | Sequence | pt_pred | hb_pred | hy_pred | 
+| Chothia | Sequence | pt      | hb      | hy      | 
 |:-------:|:--------:|:-------:|:-------:|:-------:|
 | 1       | E        | 0.23    | 0.17    | 0.24    | 
 | 2       | V        | 0.23    | 0.15    | 0.23    | 
