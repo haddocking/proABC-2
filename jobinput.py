@@ -75,9 +75,9 @@ def read_input_single(file, jobid, hmmpath):
             lambda_hmm = os.path.join(src_path, "LAMBDA.hmm")
 
             # Test if .hmm files exists and are accessible
-            is_accessible(path=heavy_hmm, jobid=jobid)
-            is_accessible(path=kapp_hmm, jobid=jobid)
-            is_accessible(path=lambda_hmm, jobid=jobid)
+            #is_accessible(path=heavy_hmm, jobid=jobid)
+            #is_accessible(path=kapp_hmm, jobid=jobid)
+            #is_accessible(path=lambda_hmm, jobid=jobid)
 
             # Calculate evalues
             evalueH = float(scan(searchInputName, heavy_hmm, hmmpath, jobid, searchOutputName))
