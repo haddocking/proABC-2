@@ -6,15 +6,6 @@ from ParseHmmer import readhmmscan, read_align
 from Bio.Seq import Seq
 
 
-def is_accessible(path, jobid):
-    """
-    Check if the file or directory at path can
-    be red by the program.
-    """
-    if not os.access(path, os.R_OK):
-        write_error(f'Problems with {path}', jobid)
-
-
 def read_input_single(file, jobid, hmmpath):
     """Read input file. Check if sequence is a protein or a nucleotide. Scan and align the sequences.
     Return a dictionary with sequence header as key and heavy and light chain as sequences.
@@ -67,17 +58,18 @@ def read_input_single(file, jobid, hmmpath):
             fh.write(">" + header + "\n" + line + '\n')
             fh.close()
 
-            # Calculate .hmm paths
+            # Copy HMM into the working directory
+            # to avoid problems with multiple threads
             base_dir = os.path.dirname(__file__)
             src_path = os.path.join(base_dir, "MarkovModels/")
-            heavy_hmm = os.path.join(src_path, "HEAVY.hmm")
-            kapp_hmm = os.path.join(src_path, "KAPPA.hmm")
-            lambda_hmm = os.path.join(src_path, "LAMBDA.hmm")
+            destination = os.path.join(base_dir, jobid, "MarkovModels/")
+            if not os.path.exists(destination):
+                sh.copytree(src=src_path, dst=destination)
 
-            # Test if .hmm files exists and are accessible
-            #is_accessible(path=heavy_hmm, jobid=jobid)
-            #is_accessible(path=kapp_hmm, jobid=jobid)
-            #is_accessible(path=lambda_hmm, jobid=jobid)
+            # Define paths to .hmm files
+            heavy_hmm = os.path.join(destination, "HEAVY.hmm")
+            kapp_hmm = os.path.join(destination, "KAPPA.hmm")
+            lambda_hmm = os.path.join(destination, "LAMBDA.hmm")
 
             # Calculate evalues
             evalueH = float(scan(searchInputName, heavy_hmm, hmmpath, jobid, searchOutputName))
