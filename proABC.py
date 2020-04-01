@@ -62,7 +62,7 @@ def get_features(jobid, hmmpath, light, heavy, ig_database_H, ig_database_K, ig_
     myAb = {'input':{'H': '', 'L': '', 'K': ''}}
 
     # Chain H
-    Seq,isotype = ji.read_input_single(format_heavy, jobid, hmmpath, TargetName)
+    Seq,isotype = ji.read_input_single(format_heavy, jobid, hmmpath)
     fhLog.write(heavy +' sequence is ' +  Seq + '\n')
     fhLog.write('Isotype is ' + isotype + '\n')
 
@@ -70,7 +70,7 @@ def get_features(jobid, hmmpath, light, heavy, ig_database_H, ig_database_K, ig_
         myAb['input'][isotype] = Seq
 
     # Chain L
-    Seq, isotype = ji.read_input_single(format_light, jobid, hmmpath, TargetName)
+    Seq, isotype = ji.read_input_single(format_light, jobid, hmmpath)
     fhLog.write(light + ' sequence is ' + Seq + '\n')
     fhLog.write('Isotype is '+ isotype + '\n')
 
