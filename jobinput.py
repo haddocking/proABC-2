@@ -1,21 +1,18 @@
 import subprocess as sub
 import re
 import os
+import shutil as sh
 from ParseHmmer import readhmmscan, read_align
 from Bio.Seq import Seq
 
 
-def is_accessible(path, jobid, mode='r'):
+def is_accessible(path, jobid):
     """
     Check if the file or directory at path can
-    be accessed by the program using mode open flags.
+    be red by the program.
     """
-    try:
-        f = open(path, mode)
-        f.close()
-    except (IOError, FileNotFoundError) as e:
-        print(e)
-        write_error(f'Problems with {path}: {e}', jobid)
+    if not os.access(path, os.R_OK):
+        write_error(f'Problems with {path}', jobid)
 
 
 def read_input_single(file, jobid, hmmpath):
@@ -70,16 +67,17 @@ def read_input_single(file, jobid, hmmpath):
             fh.write(">" + header + "\n" + line + '\n')
             fh.close()
 
-            # Calculate HMMER paths
+            # Calculate .hmm paths
             base_dir = os.path.dirname(__file__)
-            heavy_hmm = os.path.join(base_dir, "MarkovModels/HEAVY.hmm")
-            kapp_hmm = os.path.join(base_dir, "MarkovModels/KAPPA.hmm")
-            lambda_hmm = os.path.join(base_dir, "MarkovModels/LAMBDA.hmm")
+            src_path = os.path.join(base_dir, "MarkovModels/")
+            heavy_hmm = os.path.join(src_path, "HEAVY.hmm")
+            kapp_hmm = os.path.join(src_path, "KAPPA.hmm")
+            lambda_hmm = os.path.join(src_path, "LAMBDA.hmm")
 
             # Test if .hmm files exists and are accessible
-            is_accessible(path=heavy_hmm, mode='r', jobid=jobid)
-            is_accessible(path=kapp_hmm, mode='r', jobid=jobid)
-            is_accessible(path=lambda_hmm, mode='r', jobid=jobid)
+            is_accessible(path=heavy_hmm, jobid=jobid)
+            is_accessible(path=kapp_hmm, jobid=jobid)
+            is_accessible(path=lambda_hmm, jobid=jobid)
 
             # Calculate evalues
             evalueH = float(scan(searchInputName, heavy_hmm, hmmpath, jobid, searchOutputName))
