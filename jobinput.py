@@ -5,7 +5,20 @@ from ParseHmmer import readhmmscan, read_align
 from Bio.Seq import Seq
 
 
-def read_input_single(file, jobid, hmmpath, TargetName):
+def is_accessible(path, jobid, mode='r'):
+    """
+    Check if the file or directory at path can
+    be accessed by the program using mode open flags.
+    """
+    try:
+        f = open(path, mode)
+        f.close()
+    except (IOError, FileNotFoundError) as e:
+        print(e)
+        write_error(f'Problems with {path}: {e}', jobid)
+
+
+def read_input_single(file, jobid, hmmpath):
     """Read input file. Check if sequence is a protein or a nucleotide. Scan and align the sequences.
     Return a dictionary with sequence header as key and heavy and light chain as sequences.
     """
@@ -63,6 +76,12 @@ def read_input_single(file, jobid, hmmpath, TargetName):
             kapp_hmm = os.path.join(base_dir, "MarkovModels/KAPPA.hmm")
             lambda_hmm = os.path.join(base_dir, "MarkovModels/LAMBDA.hmm")
 
+            # Test if .hmm files exists and are accessible
+            is_accessible(path=heavy_hmm, mode='r', jobid=jobid)
+            is_accessible(path=kapp_hmm, mode='r', jobid=jobid)
+            is_accessible(path=lambda_hmm, mode='r', jobid=jobid)
+
+            # Calculate evalues
             evalueH = float(scan(searchInputName, heavy_hmm, hmmpath, jobid, searchOutputName))
             evalueK = float(scan(searchInputName, kapp_hmm, hmmpath, jobid, searchOutputName))
             evalueL = float(scan(searchInputName, lambda_hmm, hmmpath, jobid, searchOutputName))
