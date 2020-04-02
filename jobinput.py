@@ -1,9 +1,10 @@
 import subprocess as sub
 import re
 import os
-import shutil as sh
 from ParseHmmer import readhmmscan, read_align
 from Bio.Seq import Seq
+from time import sleep
+import random
 
 
 def read_input_single(file, jobid, hmmpath):
@@ -62,19 +63,26 @@ def read_input_single(file, jobid, hmmpath):
             # to avoid problems with multiple threads
             base_dir = os.path.dirname(__file__)
             src_path = os.path.join(base_dir, "MarkovModels/")
-            destination = os.path.join(base_dir, jobid, "MarkovModels/")
-            if not os.path.exists(destination):
-                sh.copytree(src=src_path, dst=destination)
 
             # Define paths to .hmm files
-            heavy_hmm = os.path.join(destination, "HEAVY.hmm")
-            kapp_hmm = os.path.join(destination, "KAPPA.hmm")
-            lambda_hmm = os.path.join(destination, "LAMBDA.hmm")
+            heavy_hmm = os.path.join(src_path, "HEAVY.hmm")
+            kapp_hmm = os.path.join(src_path, "KAPPA.hmm")
+            lambda_hmm = os.path.join(src_path, "LAMBDA.hmm")
 
-            # Calculate evalues
-            evalueH = float(scan(searchInputName, heavy_hmm, hmmpath, jobid, searchOutputName))
-            evalueK = float(scan(searchInputName, kapp_hmm, hmmpath, jobid, searchOutputName))
-            evalueL = float(scan(searchInputName, lambda_hmm, hmmpath, jobid, searchOutputName))
+            # Fix the HMM problems with double threads
+            for x in range(0, 4):
+                try:
+                    # Calculate evalues
+                    evalueH = float(scan(searchInputName, heavy_hmm, hmmpath, jobid, searchOutputName))
+                    evalueK = float(scan(searchInputName, kapp_hmm, hmmpath, jobid, searchOutputName))
+                    evalueL = float(scan(searchInputName, lambda_hmm, hmmpath, jobid, searchOutputName))
+                except Exception as e:
+                    pass
+
+                if e:
+                    sleep(random.uniform(0.5, 3.0))  # wait a random time before trying again
+                else:
+                    break
 
             # more than one domain found in the input sequence. HMM failed to align sequence
             if not evalueH:
