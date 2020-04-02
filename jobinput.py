@@ -205,7 +205,7 @@ def get_germline(jobid, ig_database, chain, germfile):
     out, errors = p.communicate()
 
     if errors:
-        write_error('Error in running igblastp for {}'.format(germfile), jobid)
+        write_error(f'Error in running igblastp for {germfile}: {errors}', jobid)
 
     with open(germfile) as f:
         line = f.read().split('\n')
