@@ -76,6 +76,7 @@ def read_input_single(file, jobid, hmmpath):
                     evalueH = float(scan(searchInputName, heavy_hmm, hmmpath, jobid, searchOutputName))
                     evalueK = float(scan(searchInputName, kapp_hmm, hmmpath, jobid, searchOutputName))
                     evalueL = float(scan(searchInputName, lambda_hmm, hmmpath, jobid, searchOutputName))
+                    e = None
                 except Exception as e:
                     pass
 
