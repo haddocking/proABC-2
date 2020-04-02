@@ -186,7 +186,7 @@ def scan(searchInputName, hmm, hmmpath, jobid, searchOutputName):
     # If there are still errors stop the program
     if errors:
         # write errors
-        write_error(f'Error with hmmascan:{errors}', jobid)
+        write_error(f'Error with hmmscan:{errors}', jobid)
 
     # parse hmmscan output file
     score = readhmmscan(searchOutputName)
