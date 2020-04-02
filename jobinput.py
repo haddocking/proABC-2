@@ -59,31 +59,17 @@ def read_input_single(file, jobid, hmmpath):
             fh.write(">" + header + "\n" + line + '\n')
             fh.close()
 
-            # Copy HMM into the working directory
-            # to avoid problems with multiple threads
+            # Define paths to .hmm files
             base_dir = os.path.dirname(__file__)
             src_path = os.path.join(base_dir, "MarkovModels/")
-
-            # Define paths to .hmm files
             heavy_hmm = os.path.join(src_path, "HEAVY.hmm")
             kapp_hmm = os.path.join(src_path, "KAPPA.hmm")
             lambda_hmm = os.path.join(src_path, "LAMBDA.hmm")
 
-            # Fix the HMM problems with double threads
-            for x in range(0, 4):
-                try:
-                    # Calculate evalues
-                    evalueH = float(scan(searchInputName, heavy_hmm, hmmpath, jobid, searchOutputName))
-                    evalueK = float(scan(searchInputName, kapp_hmm, hmmpath, jobid, searchOutputName))
-                    evalueL = float(scan(searchInputName, lambda_hmm, hmmpath, jobid, searchOutputName))
-                    e = None
-                except Exception as e:
-                    pass
-
-                if e:
-                    sleep(random.uniform(0.5, 3.0))  # wait a random time before trying again
-                else:
-                    break
+            # Calculate evalues
+            evalueH = float(scan(searchInputName, heavy_hmm, hmmpath, jobid, searchOutputName))
+            evalueK = float(scan(searchInputName, kapp_hmm, hmmpath, jobid, searchOutputName))
+            evalueL = float(scan(searchInputName, lambda_hmm, hmmpath, jobid, searchOutputName))
 
             # more than one domain found in the input sequence. HMM failed to align sequence
             if not evalueH:
@@ -186,16 +172,21 @@ def isProtein(seq):
 def scan(searchInputName, hmm, hmmpath, jobid, searchOutputName):
     """Scan sequence with HMM"""
 
-    # run hmmscan exacutable
+    # build hmmscan command
     command = [hmmpath + 'hmmscan', '--domtblout', searchOutputName, hmm, searchInputName]
 
-    # run hmmscan
-    p = sub.Popen(command, stdout=sub.PIPE, stderr=sub.PIPE)
-    out, errors = p.communicate()
-
+    # Fix the HMM problems with multiple threads
+    for x in range(0, 5):
+        p = sub.Popen(command, stdout=sub.PIPE, stderr=sub.PIPE)
+        out, errors = p.communicate()
+        if errors:
+            sleep(random.uniform(0.5, 3.0))  # wait a random time before trying again
+        else:
+            break
+    # If there are still errors stop the program
     if errors:
         # write errors
-        write_error(errors, jobid)
+        write_error(f'Error with hmmascan:{errors}', jobid)
 
     # parse hmmscan output file
     score = readhmmscan(searchOutputName)
@@ -236,15 +227,21 @@ def align(searchInputName, hmm, hmmpath, jobid, alignOutputName):
 
     # hmmalign output file
     fhIn = open(alignOutputName, 'w')
-    # run hmmalign
+    # build hmmalign command
     command = [hmmpath + 'hmmalign', '--trim', hmm, searchInputName]
 
-    p = sub.Popen(command, stdout=fhIn, stderr=sub.PIPE)
-    out, errors = p.communicate()
-
+    # Fix the HMM problems with multiple threads
+    for x in range(0, 5):
+        p = sub.Popen(command, stdout=fhIn, stderr=sub.PIPE)
+        out, errors = p.communicate()
+        if errors:
+            sleep(random.uniform(0.5, 3.0))  # wait a random time before trying again
+        else:
+            break
+    # If there are still errors stop the program
     if errors:
         # write errors
-        write_error(errors, jobid)
+        write_error(f'Error with hmmalign:{errors}', jobid)
 
     # Parsing alignment file
     aligned = read_align(alignOutputName)
