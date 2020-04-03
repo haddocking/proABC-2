@@ -3,8 +3,6 @@ import re
 import os
 from ParseHmmer import readhmmscan, read_align
 from Bio.Seq import Seq
-from time import sleep
-import random
 
 
 def read_input_single(file, jobid, hmmpath):
@@ -175,18 +173,14 @@ def scan(searchInputName, hmm, hmmpath, jobid, searchOutputName):
     # build hmmscan command
     command = [hmmpath + 'hmmscan', '--domtblout', searchOutputName, hmm, searchInputName]
 
-    # Fix the HMM problems with multiple threads
-    for x in range(0, 5):
-        p = sub.Popen(command, stdout=sub.PIPE, stderr=sub.PIPE)
-        out, errors = p.communicate()
-        if errors:
-            sleep(random.uniform(0.5, 3.0))  # wait a random time before trying again
-        else:
-            break
-    # If there are still errors stop the program
+    # run hmmscan
+    p = sub.Popen(command, stdout=sub.PIPE, stderr=sub.PIPE)
+    out, errors = p.communicate()
+
+    # If there are errors stop the program
     if errors:
         # write errors
-        write_error(f'Error with hmmscan:{errors}', jobid)
+        write_error(f'Error with hmmscan: {errors}', jobid)
 
     # parse hmmscan output file
     score = readhmmscan(searchOutputName)
@@ -230,18 +224,14 @@ def align(searchInputName, hmm, hmmpath, jobid, alignOutputName):
     # build hmmalign command
     command = [hmmpath + 'hmmalign', '--trim', hmm, searchInputName]
 
-    # Fix the HMM problems with multiple threads
-    for x in range(0, 5):
-        p = sub.Popen(command, stdout=fhIn, stderr=sub.PIPE)
-        out, errors = p.communicate()
-        if errors:
-            sleep(random.uniform(0.5, 3.0))  # wait a random time before trying again
-        else:
-            break
+    # Run hmmalign
+    p = sub.Popen(command, stdout=fhIn, stderr=sub.PIPE)
+    out, errors = p.communicate()
+
     # If there are still errors stop the program
     if errors:
         # write errors
-        write_error(f'Error with hmmalign:{errors}', jobid)
+        write_error(f'Error with hmmalign: {errors}', jobid)
 
     # Parsing alignment file
     aligned = read_align(alignOutputName)
