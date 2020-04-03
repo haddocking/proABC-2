@@ -58,8 +58,12 @@ def read_input_single(file, jobid, hmmpath):
             fh.close()
 
             # Define paths to .hmm files
-            base_dir = os.path.dirname(__file__)
-            src_path = os.path.join(base_dir, "MarkovModels/")
+            if os.path.exists(os.path.join(jobid, "MarkovModels/")):
+                src_path = os.path.join(jobid, "MarkovModels/")
+            else:
+                base_dir = os.path.dirname(__file__)
+                src_path = os.path.join(base_dir, "MarkovModels/")
+
             heavy_hmm = os.path.join(src_path, "HEAVY.hmm")
             kapp_hmm = os.path.join(src_path, "KAPPA.hmm")
             lambda_hmm = os.path.join(src_path, "LAMBDA.hmm")
