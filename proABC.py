@@ -239,12 +239,8 @@ def prediction(input_path, heavy_fasta_file, light_fasta_file):
         hps = {'N_BATCH': 50, 'y_out': tot}
 
         # Prediction
-        curdir = os.getcwd()
-        try:
-            os.chdir(base_dir)
-            y_pred = cn.predict(tot, hps, 'proABC_v2', x_data)
-        finally:
-            os.chdir(curdir)
+        model_path = os.path.join(base_dir, 'proABC_v2')
+        y_pred = cn.predict(tot, hps, model_path, x_data)
 
         log.write('Creating output file\n')
 
