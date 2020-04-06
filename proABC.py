@@ -201,7 +201,7 @@ def prediction(input_path, heavy_fasta_file, light_fasta_file):
         light = light_fasta_file
 
         # Calculate absolute paths
-        base_dir = os.path.dirname(__file__)
+        base_dir = os.path.abspath(os.path.dirname(__file__))
         # file to encode the sequences
         seq_encoding = os.path.join(base_dir, 'Sparse_encoding_v2.txt')
         # igblastp database for heavy Kappa and Light chain
