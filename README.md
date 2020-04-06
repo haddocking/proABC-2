@@ -34,7 +34,7 @@ python proABC.py Example heavy.fasta light.fasta
 
 # Output
 
-It returns 2 .csv files: **heavy-pred.csv** and **light-pred.csv** (inside the <*input folder*>) respectively for the heavy and the light antibody chains. 
+It returns 2 *.csv* files: **heavy-pred.csv** and **light-pred.csv** (inside the <*input folder*>) respectively for the heavy and the light antibody chains. 
 They consist of  several columns: 
 
 * Chothia: position of the residue according to the Chothia numbering scheme
