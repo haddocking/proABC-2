@@ -93,10 +93,11 @@ def check_input(args):
 
 
 class RunProABC2:
+    """ Class to run and collect the proABC-2 webserver predictions"""
 
     def __init__(self, heavy, light, proabc_url='https://bianca.science.uu.nl/proabc2/'):
         """
-        Class to run and collect the proABC-2 webserver predictions
+        Constructor for the RunProABC2 class
         Args:
             heavy (str): fasta file of the heavy chain
             light (str): fasta file of the light chain
