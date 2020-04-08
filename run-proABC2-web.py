@@ -36,11 +36,14 @@ USAGE = __doc__.format(__author__, __email__)
 def write_error(msg, use=True):
     """
     Writes error message and exit
-    :param msg: <string> message to be written
-    :param use: <boolean> True prints also the USAGE
-    False does not
-    :return: 0
+    Args:
+        msg (str): message to be written
+        use (bool): True prints also the USAGE, False does not
+
+    Returns:
+        0
     """
+
     if use:
         sys.stderr.write(msg)
         sys.stderr.write(USAGE)
@@ -55,10 +58,13 @@ def write_error(msg, use=True):
 def check_input(args):
     """
     Validates user inputs
-    :param args: <list> list of user inputs
-    :return: <string> heavy: path to the input heavy.fasta file
-    <string> light: path to the light.fasta file
-    """""
+    Args:
+        args (list): list of user inputs
+
+    Returns:
+        heavy (str): path to the input heavy.fasta file
+        light (str): path to the light.fasta file
+    """
 
     if not len(args):
         emsg = f'\nERROR!! No files provided\n'
@@ -88,10 +94,12 @@ def check_input(args):
 
 def get_csrf(url):
     """
-    Retrieves the csrf token of a url.
-    :param url: <string> url of the website
-    :return: <string> csrf token
-    <requests.session object> client
+    Args:
+        url (str): url of the website
+
+    Returns:
+        client (requests.session object): request.session object
+        csrftoken (str): csrf token of the session
     """
 
     # Check connection
@@ -117,12 +125,14 @@ def get_csrf(url):
 
 def launch(heavy, light, proabc_url='https://bianca.science.uu.nl/proabc2/'):
     """
-    Run the job on the proABC2 webserver
-    :param heavy: <string> fasta file of the heavy chain
-    :param light: <string> fasta file of the light chain
-    :param proabc_url: <string> url to the proABC-2 webserver
-    :return: <string> url of the output
-    <string> job id
+    Args:
+        heavy (str): fasta file of the heavy chain
+        light (str): fasta file of the light chain
+        proabc_url (str): url to the proABC-2 webserver
+
+    Returns:
+        out_url (str): url of the output
+        job_id (str): job id
     """
 
     # Retrieve csrf token first
@@ -148,9 +158,13 @@ def check_status(proabc_job):
     """
     Check status of the proABC-2 job and return a error if
     the run has failed
-    :param proabc_job: <string> url to the job
-    :return: 0
+    Args:
+        proabc_job (str): url of the proABC-2 job
+
+    Returns:
+        0
     """
+
     client = requests.session()
     r = ''
 
@@ -178,10 +192,13 @@ def check_status(proabc_job):
 def download_results(job_name, result_url='https://bianca.science.uu.nl/proabc2/res/'):
     """
     Downloads proABC-2 predictions and writes them
-    into two files: {jobname}_heavy.csv and {jobname}_light.csv
-    :param job_name: <string> name of the job
-    :param result_url: <string> url of the result page
-    :return: 0
+    into two files: <job_name>_heavy.csv and <job_name>_light.csv
+    Args:
+        job_name (str): name of the proABC-2 job
+        result_url (str): url of the result page
+
+    Returns:
+        0
     """
 
     # Create result urls
