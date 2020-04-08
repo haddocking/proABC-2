@@ -258,4 +258,3 @@ if __name__ == "__main__":
     proabc_web.download_results(job_name=id_job)
 
     print(f'{job_url} --- Success')
-
