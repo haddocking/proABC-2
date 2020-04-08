@@ -92,137 +92,144 @@ def check_input(args):
         return heavy, light
 
 
-def get_csrf(url):
-    """
-    Args:
-        url (str): url of the website
+class RunProABC2:
 
-    Returns:
-        client (requests.session object): request.session object
-        csrftoken (str): csrf token of the session
-    """
+    def __init__(self, heavy, light, proabc_url='https://bianca.science.uu.nl/proabc2/'):
+        """
+        Class to run and collect the proABC-2 webserver predictions
+        Args:
+            heavy (str): fasta file of the heavy chain
+            light (str): fasta file of the light chain
+            proabc_url (str): url to the proABC-2 webserver
+        """
+        self.heavy = heavy
+        self.light = light
+        self.proabc_url = proabc_url
 
-    # Check connection
-    client = requests.session()
-    r = ''
-    try:
-        r = client.get(url, verify=False)
-    except requests.exceptions.ConnectionError:
-        emsg = f'\nERROR!! {url} does not exist or not reachable\n\n'
-        write_error(msg=emsg, use=False)
+    def get_csrf(self):
+        """
+        Retrieves the csrf token
+        Returns:
+            client (requests.session object): request.session object
+            csrftoken (str): csrf token of the session
+        """
 
-    # Get token
-    csrftoken = ''
-    try:
-        line = re.search(r'<input id="csrf_token" name="csrf_token" type="hidden" value=(\S+)', r.text).group(1)
-        csrftoken = re.findall(r'"([^"]*)"', line)[0]
-    except AttributeError as e:
-        emsg = f'\nProblems retrieving csrf_token: {e}\n\n'
-        write_error(msg=emsg, use=False)
+        # Check connection
+        client = requests.session()
+        r = ''
+        try:
+            r = client.get(self.proabc_url, verify=False)
+        except (requests.exceptions.ConnectionError, requests.exceptions.MissingSchema):
+            emsg = f'\nERROR!! {self.proabc_url} does not exist or not reachable\n\n'
+            write_error(msg=emsg, use=False)
 
-    return client, csrftoken
+        # Get token
+        csrftoken = ''
+        try:
+            line = re.search(r'<input id="csrf_token" name="csrf_token" type="hidden" value=(\S+)', r.text).group(1)
+            csrftoken = re.findall(r'"([^"]*)"', line)[0]
+        except AttributeError as e:
+            emsg = f'\nProblems retrieving csrf_token: {e}\n\n'
+            write_error(msg=emsg, use=False)
 
+        return client, csrftoken
 
-def launch(heavy, light, proabc_url='https://bianca.science.uu.nl/proabc2/'):
-    """
-    Args:
-        heavy (str): fasta file of the heavy chain
-        light (str): fasta file of the light chain
-        proabc_url (str): url to the proABC-2 webserver
+    def launch(self):
+        """
+        Run a proABC-2 job
+        Returns:
+            out_url (str): url of the output
+            job_id (str): job id
+        """
 
-    Returns:
-        out_url (str): url of the output
-        job_id (str): job id
-    """
+        # Retrieve csrf token first
+        client, csrf_token = self.get_csrf()
 
-    # Retrieve csrf token first
-    client, csrf_token = get_csrf(proabc_url)
+        # Parameters to run proABC-2
+        params = {'csrf_token': csrf_token,
+                  'sequence_heavy': open(self.heavy).read(),
+                  'sequence_light': open(self.light).read()}
 
-    # Parameters to run proABC-2
-    params = {'csrf_token': csrf_token,
-              'sequence_heavy': open(heavy).read(),
-              'sequence_light': open(light).read()}
+        # Run job
+        job = client.post(url=self.proabc_url, data=params, verify=False)
 
-    # Run job
-    job = client.post(url=proabc_url, data=params, verify=False)
+        # Get results url
+        result = job.text
+        job_id = re.search(r'Run (\S+)', result).group(1)
+        out_url = f'{self.proabc_url}run/{job_id}'
 
-    # Get results url
-    result = job.text
-    job_id = re.search(r'Run (\S+)', result).group(1)
-    out_url = f'{proabc_url}run/{job_id}'
+        return out_url, job_id
 
-    return out_url, job_id
+    @staticmethod
+    def check_status(proabc_job):
+        """
+        Check status of the proABC-2 job and return a error if
+        the run has failed
+        Args:
+            proabc_job (str): url of the proABC-2 job
 
+        Returns:
+            0
+        """
 
-def check_status(proabc_job):
-    """
-    Check status of the proABC-2 job and return a error if
-    the run has failed
-    Args:
-        proabc_job (str): url of the proABC-2 job
+        client = requests.session()
+        r = ''
 
-    Returns:
-        0
-    """
+        # Check connection
+        try:
+            r = client.get(proabc_job, verify=False)
+        except (requests.exceptions.ConnectionError, requests.exceptions.MissingSchema):
+            emsg = f'\nERROR!! {proabc_job} does not exist or not reachable\n\n'
+            write_error(msg=emsg, use=False)
 
-    client = requests.session()
-    r = ''
+        # Retrieve run status
+        status = ''
+        try:
+            status = re.search(r'Status: (\S+)', r.text).group(1)
+        except AttributeError:
+            pass
 
-    # Check connection
-    try:
-        r = client.get(proabc_job, verify=False)
-    except requests.exceptions.ConnectionError:
-        emsg = f'\nERROR!! {proabc_job} does not exist or not reachable\n\n'
-        write_error(msg=emsg, use=False)
+        if status == 'Failed':
+            emsg = f'Your run: {proabc_job} has failed\n'
+            write_error(msg=emsg, use=False)
 
-    # Retrieve run status
-    status = ''
-    try:
-        status = re.search(r'Status: (\S+)', r.text).group(1)
-    except AttributeError:
-        pass
+        return 0
 
-    if status == 'Failed':
-        emsg = f'Your run: {proabc_job} has failed\n'
-        write_error(msg=emsg, use=False)
+    @staticmethod
+    def download_results(job_name, result_url='https://bianca.science.uu.nl/proabc2/res/'):
+        """
+        Downloads proABC-2 predictions and writes them
+        into two files: <job_name>_heavy.csv and <job_name>_light.csv
+        Args:
+            job_name (str): name of the proABC-2 job
+            result_url (str): url of the result page
 
-    return 0
+        Returns:
+            0
+        """
 
+        # Create result urls
+        client = requests.session()
+        job_results_heavy = f'{result_url}{job_name}/heavy-pred.csv'
+        job_results_light = f'{result_url}{job_name}/light-pred.csv'
+        r_heavy = ''
+        r_light = ''
 
-def download_results(job_name, result_url='https://bianca.science.uu.nl/proabc2/res/'):
-    """
-    Downloads proABC-2 predictions and writes them
-    into two files: <job_name>_heavy.csv and <job_name>_light.csv
-    Args:
-        job_name (str): name of the proABC-2 job
-        result_url (str): url of the result page
+        # Download results
+        try:
+            r_heavy = client.get(job_results_heavy, verify=False)
+            r_light = client.get(job_results_light, verify=False)
+        except requests.exceptions.ConnectionError:
+            emsg = f'\nERROR!! {job_results_heavy} or {job_results_light} does not exist or not reachable\n\n'
+            write_error(msg=emsg, use=False)
 
-    Returns:
-        0
-    """
+        # Write results into separated files
+        with open(f'{job_name}_heavy.csv', 'w') as he:
+            he.write(r_heavy.text)
+        with open(f'{job_name}_light.csv', 'w') as li:
+            li.write(r_light.text)
 
-    # Create result urls
-    client = requests.session()
-    job_results_heavy = f'{result_url}{job_name}/heavy-pred.csv'
-    job_results_light = f'{result_url}{job_name}/light-pred.csv'
-    r_heavy = ''
-    r_light = ''
-
-    # Download results
-    try:
-        r_heavy = client.get(job_results_heavy, verify=False)
-        r_light = client.get(job_results_light, verify=False)
-    except requests.exceptions.ConnectionError:
-        emsg = f'\nERROR!! {job_results_heavy} or {job_results_light} does not exist or not reachable\n\n'
-        write_error(msg=emsg, use=False)
-
-    # Write results into separated files
-    with open(f'{job_name}_heavy.csv', 'w') as he:
-        he.write(r_heavy.text)
-    with open(f'{job_name}_light.csv', 'w') as li:
-        li.write(r_light.text)
-
-    return 0
+        return 0
 
 
 if __name__ == "__main__":
@@ -233,11 +240,14 @@ if __name__ == "__main__":
     # Validates inputs
     file_heavy, file_light = check_input(sys.argv[1:])
 
+    # Define class
+    proabc_web = RunProABC2(file_heavy, file_light)
+
     # Run proABC-2 web-server
-    job_url, id_job = launch(heavy=file_heavy, light=file_light)
+    job_url, id_job = proabc_web.launch()
 
     # Check if run has failed
-    check_status(job_url)
+    proabc_web.check_status(job_url)
 
     # Sleep to not overload the webserver
     # when multiple jobs are run sequentially
@@ -245,6 +255,7 @@ if __name__ == "__main__":
     sleep(10)
 
     # Download the results
-    download_results(job_name=id_job)
+    proabc_web.download_results(job_name=id_job)
 
     print(f'{job_url} --- Success')
+
