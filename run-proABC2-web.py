@@ -6,7 +6,7 @@
 #
 
 """
-This script is used to launch the proABC-2 web-server predictions.
+This script is used to launch and download the proABC-2 webserver predictions.
 It requires only the heavy and light chain fasta files.
 
 Usage:
@@ -88,14 +88,13 @@ def check_input(args):
 
 def get_csrf(url):
     """
-    Retrieves the csrf token of a url. It also
-    checks the connection to the website
+    Retrieves the csrf token of a url.
     :param url: <string> url of the website
     :return: <string> csrf token
     <requests.session object> client
     """
 
-    # Retrieve the CSRF token
+    # Check connection
     client = requests.session()
     r = ''
     try:
@@ -154,12 +153,15 @@ def check_status(proabc_job):
     """
     client = requests.session()
     r = ''
+
+    # Check connection
     try:
         r = client.get(proabc_job, verify=False)
     except requests.exceptions.ConnectionError:
         emsg = f'\nERROR!! {proabc_job} does not exist or not reachable\n\n'
         write_error(msg=emsg, use=False)
 
+    # Retrieve run status
     status = ''
     try:
         status = re.search(r'Status: (\S+)', r.text).group(1)
@@ -220,7 +222,7 @@ if __name__ == "__main__":
     # Check if run has failed
     check_status(job_url)
 
-    # Sleep to not overload the web-server
+    # Sleep to not overload the webserver
     # when multiple jobs are run sequentially
     # and to be able to download the results
     sleep(10)
