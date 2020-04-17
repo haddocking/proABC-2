@@ -164,7 +164,7 @@ class RunProABC2:
     @staticmethod
     def check_status(proabc_job):
         """
-        Check status of the proABC-2 job and return a error if
+        Check status of the proABC-2 job and return an error if
         the run has failed
         Args:
             proabc_job (str): url of the proABC-2 job
