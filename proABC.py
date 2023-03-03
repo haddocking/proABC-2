@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 
 #
-# Copyright 2019: 
+# Copyright 2019:
 #   Francesco Ambrosetti
 #   Pier Paolo Olimpieri
 #   Tobias Hegelund Olsen
 #   Brian Jimenez-Garcia
-# 
+#
 
 import argparse
 import jobinput as ji
@@ -291,7 +291,7 @@ def prediction(input_path, heavy_fasta_file, light_fasta_file):
     except Exception as err:
         print('ERROR in proABC-2 prediction:')
         print(err)
-        raise SystemExit()
+        raise SystemExit(1)
 
 
 if __name__ == '__main__':
