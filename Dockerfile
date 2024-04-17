@@ -55,5 +55,12 @@ WORKDIR /data
 ENTRYPOINT ["conda", "run", "-n", "proABC-2", "python", "/opt/software/proABC-2/proABC.py"]
 #==============================================================================================
 
+FROM build AS test
 
+RUN conda run -n proABC-2 pip install pytest coverage pytest pytest-cov hypothesis
 
+WORKDIR /opt/software/proABC-2
+
+ENTRYPOINT []
+
+#==============================================================================================
