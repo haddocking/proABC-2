@@ -1,16 +1,14 @@
 name: ci
 
 on:
-  pull_request:
-    branches:
-      - main
+  push:
 
 jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - name: Delete huge unnecessary tools folder
-        run: rm -rf /opt/hostedtoolcache
+      # - name: Delete huge unnecessary tools folder
+      #   run: rm -rf /opt/hostedtoolcache
 
       - name: Checkout code
         uses: actions/checkout@v2
@@ -32,9 +30,9 @@ jobs:
           -v ${PWD}/coverage-report:/opt/software/proABC-2/coverage-report
           --rm
           proabc2:test
-          conda run -n proABC-2 pytest --cov --cov-report xml:/opt/software/proABC-2/coverage-report/coverage.xml --cov-append -vv --hypothesis-show-statistics
+          pytest --cov --cov-report xml:/opt/software/proABC-2/coverage-report/coverage.xml --cov-append -vv --hypothesis-show-statistics
 
-      # - uses: codacy/codacy-coverage-reporter-action@v1
-      #   with:
-      #     project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
-      #     coverage-reports: ./coverage-report/coverage.xml
+      - uses: codacy/codacy-coverage-reporter-action@v1
+        with:
+          project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
+          coverage-reports: ./coverage-report/coverage.xml
