@@ -4,7 +4,9 @@ import os
 from proabc_2.ParseHmmer import readhmmscan, read_align
 from Bio.Seq import Seq
 
+# TODO: Set these paths as environment variables
 HMMER_PATH = "/home/rodrigo/software/hmmer-3.4/bin/"
+IGBLAST_PATH = "/home/rodrigo/software/ncbi-igblast-1.14.0/bin/"
 
 
 def read_input_single(file, jobid, hmmpath):
@@ -201,7 +203,7 @@ def get_germline(jobid, ig_database, chain, germfile):
     chain = path to the .fasta file of the desired chain
     germfile = path to the output of igblastp
     """
-    command = ['igblastp', '-germline_db_V', ig_database, '-query', jobid + chain, '-out', germfile]
+    command = [IGBLAST_PATH + 'igblastp', '-germline_db_V', ig_database, '-query', jobid + chain, '-out', germfile]
     p = sub.Popen(command, stderr=sub.PIPE)
     out, errors = p.communicate()
 
