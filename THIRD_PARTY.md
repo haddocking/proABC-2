@@ -1,5 +1,3 @@
-
-
 ## HMMER
 
 ```text

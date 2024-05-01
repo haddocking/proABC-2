@@ -1,21 +1,23 @@
 import os
-import numpy as np
 import warnings
 
-from tensorflow.keras.callbacks import Callback
+import numpy as np
 from tensorflow.keras import backend as K
+from tensorflow.keras.callbacks import Callback
 
 
 # Code is ported from https://github.com/fastai/fastai
 class OneCycleLR(Callback):
-    def __init__(self,
-                 max_lr,
-                 end_percentage=0.1,
-                 scale_percentage=None,
-                 maximum_momentum=0.95,
-                 minimum_momentum=0.85,
-                 verbose=True):
-        """ This callback implements a cyclical learning rate policy (CLR).
+    def __init__(
+        self,
+        max_lr,
+        end_percentage=0.1,
+        scale_percentage=None,
+        maximum_momentum=0.95,
+        minimum_momentum=0.85,
+        verbose=True,
+    ):
+        """This callback implements a cyclical learning rate policy (CLR).
         This is a special case of Cyclic Learning Rates, where we have only 1 cycle.
         After the completion of 1 cycle, the learning rate will decrease rapidly to
         100th its initial lowest value.
@@ -45,15 +47,21 @@ class OneCycleLR(Callback):
         """
         super(OneCycleLR, self).__init__()
 
-        if end_percentage < 0. or end_percentage > 1.:
+        if end_percentage < 0.0 or end_percentage > 1.0:
             raise ValueError("`end_percentage` must be between 0 and 1")
 
-        if scale_percentage is not None and (scale_percentage < 0. or scale_percentage > 1.):
+        if scale_percentage is not None and (
+            scale_percentage < 0.0 or scale_percentage > 1.0
+        ):
             raise ValueError("`scale_percentage` must be between 0 and 1")
 
         self.initial_lr = max_lr
         self.end_percentage = end_percentage
-        self.scale = float(scale_percentage) if scale_percentage is not None else float(end_percentage)
+        self.scale = (
+            float(scale_percentage)
+            if scale_percentage is not None
+            else float(end_percentage)
+        )
         self.max_momentum = maximum_momentum
         self.min_momentum = minimum_momentum
         self.verbose = verbose
@@ -63,7 +71,7 @@ class OneCycleLR(Callback):
         else:
             self._update_momentum = False
 
-        self.clr_iterations = 0.
+        self.clr_iterations = 0.0
         self.history = {}
 
         self.epochs = None
@@ -77,7 +85,7 @@ class OneCycleLR(Callback):
         """
         Reset the callback.
         """
-        self.clr_iterations = 0.
+        self.clr_iterations = 0.0
         self.history = {}
 
     def compute_lr(self):
@@ -93,21 +101,31 @@ class OneCycleLR(Callback):
             the new learning rate
         """
         if self.clr_iterations > 2 * self.mid_cycle_id:
-            current_percentage = (self.clr_iterations - 2 * self.mid_cycle_id)
+            current_percentage = self.clr_iterations - 2 * self.mid_cycle_id
             current_percentage /= float((self.num_iterations - 2 * self.mid_cycle_id))
-            new_lr = self.initial_lr * (1. + (current_percentage *
-                                              (1. - 100.) / 100.)) * self.scale
+            new_lr = (
+                self.initial_lr
+                * (1.0 + (current_percentage * (1.0 - 100.0) / 100.0))
+                * self.scale
+            )
 
         elif self.clr_iterations > self.mid_cycle_id:
-            current_percentage = 1. - (
-                self.clr_iterations - self.mid_cycle_id) / self.mid_cycle_id
-            new_lr = self.initial_lr * (1. + current_percentage *
-                                        (self.scale * 100 - 1.)) * self.scale
+            current_percentage = (
+                1.0 - (self.clr_iterations - self.mid_cycle_id) / self.mid_cycle_id
+            )
+            new_lr = (
+                self.initial_lr
+                * (1.0 + current_percentage * (self.scale * 100 - 1.0))
+                * self.scale
+            )
 
         else:
             current_percentage = self.clr_iterations / self.mid_cycle_id
-            new_lr = self.initial_lr * (1. + current_percentage *
-                                        (self.scale * 100 - 1.)) * self.scale
+            new_lr = (
+                self.initial_lr
+                * (1.0 + current_percentage * (self.scale * 100 - 1.0))
+                * self.scale
+            )
 
         if self.clr_iterations == self.num_iterations:
             self.clr_iterations = 0
@@ -130,25 +148,28 @@ class OneCycleLR(Callback):
             new_momentum = self.max_momentum
 
         elif self.clr_iterations > self.mid_cycle_id:
-            current_percentage = 1. - ((self.clr_iterations - self.mid_cycle_id) / float(
-                                        self.mid_cycle_id))
+            current_percentage = 1.0 - (
+                (self.clr_iterations - self.mid_cycle_id) / float(self.mid_cycle_id)
+            )
             new_momentum = self.max_momentum - current_percentage * (
-                self.max_momentum - self.min_momentum)
+                self.max_momentum - self.min_momentum
+            )
 
         else:
             current_percentage = self.clr_iterations / float(self.mid_cycle_id)
             new_momentum = self.max_momentum - current_percentage * (
-                self.max_momentum - self.min_momentum)
+                self.max_momentum - self.min_momentum
+            )
 
         return new_momentum
 
     def on_train_begin(self, logs={}):
         logs = logs or {}
 
-        self.epochs = self.params['epochs']
-        self.batch_size = self.params['batch_size']
-        self.samples = self.params['samples']
-        self.steps = self.params['steps']
+        self.epochs = self.params["epochs"]
+        self.batch_size = self.params["batch_size"]
+        self.samples = self.params["samples"]
+        self.steps = self.params["steps"]
 
         if self.steps is not None:
             self.num_iterations = self.epochs * self.steps
@@ -157,15 +178,19 @@ class OneCycleLR(Callback):
                 remainder = 0
             else:
                 remainder = 1
-            self.num_iterations = (self.epochs + remainder) * self.samples // self.batch_size
+            self.num_iterations = (
+                (self.epochs + remainder) * self.samples // self.batch_size
+            )
 
-        self.mid_cycle_id = int(self.num_iterations * ((1. - self.end_percentage)) / float(2))
+        self.mid_cycle_id = int(
+            self.num_iterations * ((1.0 - self.end_percentage)) / float(2)
+        )
 
         self._reset()
         K.set_value(self.model.optimizer.lr, self.compute_lr())
 
         if self._update_momentum:
-            if not hasattr(self.model.optimizer, 'momentum'):
+            if not hasattr(self.model.optimizer, "momentum"):
                 raise ValueError("Momentum can be updated only on SGD optimizer !")
 
             new_momentum = self.compute_momentum()
@@ -177,18 +202,18 @@ class OneCycleLR(Callback):
         self.clr_iterations += 1
         new_lr = self.compute_lr()
 
-        self.history.setdefault('lr', []).append(
-            K.get_value(self.model.optimizer.lr))
+        self.history.setdefault("lr", []).append(K.get_value(self.model.optimizer.lr))
         K.set_value(self.model.optimizer.lr, new_lr)
 
         if self._update_momentum:
-            if not hasattr(self.model.optimizer, 'momentum'):
+            if not hasattr(self.model.optimizer, "momentum"):
                 raise ValueError("Momentum can be updated only on SGD optimizer !")
 
             new_momentum = self.compute_momentum()
 
-            self.history.setdefault('momentum', []).append(
-                K.get_value(self.model.optimizer.momentum))
+            self.history.setdefault("momentum", []).append(
+                K.get_value(self.model.optimizer.momentum)
+            )
             K.set_value(self.model.optimizer.momentum, new_momentum)
 
         for k, v in logs.items():
@@ -197,26 +222,30 @@ class OneCycleLR(Callback):
     def on_epoch_end(self, epoch, logs=None):
         if self.verbose:
             if self._update_momentum:
-                print(" - lr: %0.5f - momentum: %0.2f " %
-                      (self.history['lr'][-1], self.history['momentum'][-1]))
+                print(
+                    " - lr: %0.5f - momentum: %0.2f "
+                    % (self.history["lr"][-1], self.history["momentum"][-1])
+                )
 
             else:
-                print(" - lr: %0.5f " % (self.history['lr'][-1]))
+                print(" - lr: %0.5f " % (self.history["lr"][-1]))
 
 
 class LRFinder(Callback):
-    def __init__(self,
-                 num_samples,
-                 batch_size,
-                 minimum_lr=1e-5,
-                 maximum_lr=10.,
-                 lr_scale='exp',
-                 validation_data=None,
-                 validation_sample_rate=5,
-                 stopping_criterion_factor=4.,
-                 loss_smoothing_beta=0.98,
-                 save_dir=None,
-                 verbose=True):
+    def __init__(
+        self,
+        num_samples,
+        batch_size,
+        minimum_lr=1e-5,
+        maximum_lr=10.0,
+        lr_scale="exp",
+        validation_data=None,
+        validation_sample_rate=5,
+        stopping_criterion_factor=4.0,
+        loss_smoothing_beta=0.98,
+        save_dir=None,
+        verbose=True,
+    ):
         """
         This class uses the Cyclic Learning Rate history to find a
         set of learning rates that can be good initializations for the
@@ -277,7 +306,7 @@ class LRFinder(Callback):
         """
         super(LRFinder, self).__init__()
 
-        if lr_scale not in ['exp', 'linear']:
+        if lr_scale not in ["exp", "linear"]:
             raise ValueError("`lr_scale` must be one of ['exp', 'linear']")
 
         if validation_data is not None:
@@ -287,7 +316,9 @@ class LRFinder(Callback):
             if validation_sample_rate > 0 or validation_sample_rate < 0:
                 self.validation_sample_rate = validation_sample_rate
             else:
-                raise ValueError("`validation_sample_rate` must be a positive or negative integer other than o")
+                raise ValueError(
+                    "`validation_sample_rate` must be a positive or negative integer other than o"
+                )
         else:
             self.use_validation_set = False
             self.validation_sample_rate = 0
@@ -305,13 +336,15 @@ class LRFinder(Callback):
         self.num_batches_ = num_samples // batch_size
         self.current_lr_ = minimum_lr
 
-        if lr_scale == 'exp':
+        if lr_scale == "exp":
             self.lr_multiplier_ = (maximum_lr / float(minimum_lr)) ** (
-                1. / float(self.num_batches_))
+                1.0 / float(self.num_batches_)
+            )
         else:
             extra_batch = int((num_samples % batch_size) != 0)
             self.lr_multiplier_ = np.linspace(
-                minimum_lr, maximum_lr, num=self.num_batches_ + extra_batch)
+                minimum_lr, maximum_lr, num=self.num_batches_ + extra_batch
+            )
 
         # If negative, use entire validation set
         if self.validation_sample_rate < 0:
@@ -320,7 +353,7 @@ class LRFinder(Callback):
         self.current_batch_ = 0
         self.current_epoch_ = 0
         self.best_loss_ = 1e6
-        self.running_loss_ = 0.
+        self.running_loss_ = 0.0
 
         self.history = {}
 
@@ -337,7 +370,8 @@ class LRFinder(Callback):
         if self.current_epoch_ > 1:
             warnings.warn(
                 "\n\nLearning rate finder should be used only with a single epoch. "
-                "Hereafter, the callback will not measure the losses.\n\n")
+                "Hereafter, the callback will not measure the losses.\n\n"
+            )
 
     def on_batch_begin(self, batch, logs=None):
         self.current_batch_ += 1
@@ -359,25 +393,33 @@ class LRFinder(Callback):
             x = X[idx]
             y = Y[idx]
 
-            values = self.model.evaluate(x, y, batch_size=self.batch_size, verbose=False)
+            values = self.model.evaluate(
+                x, y, batch_size=self.batch_size, verbose=False
+            )
             loss = values[0]
         else:
-            loss = logs['loss']
+            loss = logs["loss"]
 
         # smooth the loss value and bias correct
-        running_loss = self.loss_smoothing_beta * loss + (
-            1. - self.loss_smoothing_beta) * loss
+        running_loss = (
+            self.loss_smoothing_beta * loss + (1.0 - self.loss_smoothing_beta) * loss
+        )
         running_loss = running_loss / (
-            1. - self.loss_smoothing_beta**self.current_batch_)
+            1.0 - self.loss_smoothing_beta**self.current_batch_
+        )
 
         # stop logging if loss is too large
-        if self.current_batch_ > 1 and self.stopping_criterion_factor is not None and (
-                running_loss >
-                self.stopping_criterion_factor * self.best_loss_):
+        if (
+            self.current_batch_ > 1
+            and self.stopping_criterion_factor is not None
+            and (running_loss > self.stopping_criterion_factor * self.best_loss_)
+        ):
 
             if self.verbose:
-                print(" - LRFinder: Skipping iteration since loss is %d times as large as best loss (%0.4f)"
-                      % (self.stopping_criterion_factor, self.best_loss_))
+                print(
+                    " - LRFinder: Skipping iteration since loss is %d times as large as best loss (%0.4f)"
+                    % (self.stopping_criterion_factor, self.best_loss_)
+                )
             return
 
         if running_loss < self.best_loss_ or self.current_batch_ == 1:
@@ -385,14 +427,14 @@ class LRFinder(Callback):
 
         current_lr = K.get_value(self.model.optimizer.lr)
 
-        self.history.setdefault('running_loss_', []).append(running_loss)
-        if self.lr_scale == 'exp':
-            self.history.setdefault('log_lrs', []).append(np.log10(current_lr))
+        self.history.setdefault("running_loss_", []).append(running_loss)
+        if self.lr_scale == "exp":
+            self.history.setdefault("log_lrs", []).append(np.log10(current_lr))
         else:
-            self.history.setdefault('log_lrs', []).append(current_lr)
+            self.history.setdefault("log_lrs", []).append(current_lr)
 
         # compute the lr for the next batch and update the optimizer lr
-        if self.lr_scale == 'exp':
+        if self.lr_scale == "exp":
             current_lr *= self.lr_multiplier_
         else:
             current_lr = self.lr_multiplier_[self.current_batch_ - 1]
@@ -405,8 +447,10 @@ class LRFinder(Callback):
 
         if self.verbose:
             if self.use_validation_set:
-                print(" - LRFinder: val_loss: %1.4f - lr = %1.8f " %
-                      (values[0], current_lr))
+                print(
+                    " - LRFinder: val_loss: %1.4f - lr = %1.8f "
+                    % (values[0], current_lr)
+                )
             else:
                 print(" - LRFinder: lr = %1.8f " % current_lr)
 
@@ -415,15 +459,17 @@ class LRFinder(Callback):
             if not os.path.exists(self.save_dir):
                 os.makedirs(self.save_dir)
 
-            losses_path = os.path.join(self.save_dir, 'losses.npy')
-            lrs_path = os.path.join(self.save_dir, 'lrs.npy')
+            losses_path = os.path.join(self.save_dir, "losses.npy")
+            lrs_path = os.path.join(self.save_dir, "lrs.npy")
 
             np.save(losses_path, self.losses)
             np.save(lrs_path, self.lrs)
 
             if self.verbose:
-                print("\tLR Finder : Saved the losses and learning rate values in path : {%s}"
-                      % (self.save_dir))
+                print(
+                    "\tLR Finder : Saved the losses and learning rate values in path : {%s}"
+                    % (self.save_dir)
+                )
 
         self.current_epoch_ += 1
 
@@ -443,11 +489,10 @@ class LRFinder(Callback):
         """
         try:
             import matplotlib.pyplot as plt
-            plt.style.use('seaborn-white')
+
+            plt.style.use("seaborn-white")
         except ImportError:
-            print(
-                "Matplotlib not found. Please use `pip install matplotlib` first."
-            )
+            print("Matplotlib not found. Please use `pip install matplotlib` first.")
             return
 
         if clip_beginning is not None and clip_beginning < 0:
@@ -468,16 +513,15 @@ class LRFinder(Callback):
             lrs = lrs[:clip_endding]
 
         plt.plot(lrs, losses)
-        plt.title('Learning rate vs Loss')
-        plt.xlabel('learning rate')
-        plt.ylabel('loss')
+        plt.title("Learning rate vs Loss")
+        plt.xlabel("learning rate")
+        plt.ylabel("loss")
         plt.show()
 
     @classmethod
-    def restore_schedule_from_dir(cls,
-                                  directory,
-                                  clip_beginning=None,
-                                  clip_endding=None):
+    def restore_schedule_from_dir(
+        cls, directory, clip_beginning=None, clip_endding=None
+    ):
         """
         Loads the training history from the saved numpy files in the given directory.
 
@@ -500,12 +544,14 @@ class LRFinder(Callback):
         if clip_endding is not None and clip_endding > 0:
             clip_endding = -clip_endding
 
-        losses_path = os.path.join(directory, 'losses.npy')
-        lrs_path = os.path.join(directory, 'lrs.npy')
+        losses_path = os.path.join(directory, "losses.npy")
+        lrs_path = os.path.join(directory, "lrs.npy")
 
         if not os.path.exists(losses_path) or not os.path.exists(lrs_path):
-            print("%s and %s could not be found at directory : {%s}" %
-                  (losses_path, lrs_path, directory))
+            print(
+                "%s and %s could not be found at directory : {%s}"
+                % (losses_path, lrs_path, directory)
+            )
 
             losses = None
             lrs = None
@@ -525,10 +571,7 @@ class LRFinder(Callback):
         return losses, lrs
 
     @classmethod
-    def plot_schedule_from_file(cls,
-                                directory,
-                                clip_beginning=None,
-                                clip_endding=None):
+    def plot_schedule_from_file(cls, directory, clip_beginning=None, clip_endding=None):
         """
         Plots the schedule from the saved numpy arrays of the loss and learning
         rate values in the specified directory.
@@ -545,29 +588,29 @@ class LRFinder(Callback):
         """
         try:
             import matplotlib.pyplot as plt
-            plt.style.use('seaborn-white')
+
+            plt.style.use("seaborn-white")
         except ImportError:
             print("Matplotlib not found. Please use `pip install matplotlib` first.")
             return
 
         losses, lrs = cls.restore_schedule_from_dir(
-            directory,
-            clip_beginning=clip_beginning,
-            clip_endding=clip_endding)
+            directory, clip_beginning=clip_beginning, clip_endding=clip_endding
+        )
 
         if losses is None or lrs is None:
             return
         else:
             plt.plot(lrs, losses)
-            plt.title('Learning rate vs Loss')
-            plt.xlabel('learning rate')
-            plt.ylabel('loss')
+            plt.title("Learning rate vs Loss")
+            plt.xlabel("learning rate")
+            plt.ylabel("loss")
             plt.show()
 
     @property
     def lrs(self):
-        return np.array(self.history['log_lrs'])
+        return np.array(self.history["log_lrs"])
 
     @property
     def losses(self):
-        return np.array(self.history['running_loss_'])
+        return np.array(self.history["running_loss_"])

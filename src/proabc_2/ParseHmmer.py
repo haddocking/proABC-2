@@ -1,5 +1,5 @@
-import re
 import os
+import re
 
 #
 # These functions always return something. Control of the alignment will be performed later in the program.
@@ -9,8 +9,7 @@ import os
 
 
 def readhmmscan(file):
-
-    """ parse the hmmscan output """
+    """parse the hmmscan output"""
 
     evalue = 1
 
@@ -32,7 +31,6 @@ def readhmmscan(file):
 
 
 def read_align(file):
-
     """parse the hmmalign output
     4fp8_J         EVQLQESGGGLVQPGESLRLSCVGSGSSFGESTlsY----YAVSWVRQAPGKGLEWLSIINA-------GGGDIDYADSVEGRFTISR...
     #=GR 4fp8_J PP 8**************************997765445....**********************.......*******************...
@@ -49,15 +47,21 @@ def read_align(file):
         for line in handle:
 
             # Extract aligned sequence
-            if not line.startswith('#') and not line.startswith('\n') and not line.startswith('//'):
+            if (
+                not line.startswith("#")
+                and not line.startswith("\n")
+                and not line.startswith("//")
+            ):
                 split = line.split()
                 aligned = aligned + split[1]
 
             # Check if alignment failed'''
-            elif re.match('\#\=GC RF', line):
+            elif re.match("\#\=GC RF", line):
                 split = line.split()
-                if re.search('\.', split[2]):   # Correct alignments do not present any dot in the GC RF line
-                    aligned = ''
+                if re.search(
+                    "\.", split[2]
+                ):  # Correct alignments do not present any dot in the GC RF line
+                    aligned = ""
                     break
 
         handle.close()
