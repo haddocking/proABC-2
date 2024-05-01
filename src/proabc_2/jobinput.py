@@ -1,14 +1,13 @@
 import os
 import re
 import subprocess as sub
+from pathlib import Path
 
 from Bio.Seq import Seq
 
 from proabc_2.ParseHmmer import read_align, readhmmscan
 
-# TODO: Set these paths as environment variables
-HMMER_PATH = "/home/rodrigo/software/hmmer-3.4/bin/"
-IGBLAST_PATH = "/home/rodrigo/software/ncbi-igblast-1.14.0/bin/"
+from . import HMMER_PATH, IGBLAST_PATH
 
 
 def read_input_single(file, jobid, hmmpath):
@@ -232,9 +231,9 @@ def scan(searchInputName, hmm, hmmpath, jobid, searchOutputName):
     """Scan sequence with HMM"""
 
     # build hmmscan command
-    # command = [hmmpath + 'hmmscan', '--domtblout', searchOutputName, hmm, searchInputName]
+    hmmscan_exec = str(Path(HMMER_PATH, "hmmscan"))
     command = [
-        HMMER_PATH + "hmmscan",
+        hmmscan_exec,
         "--domtblout",
         searchOutputName,
         hmm,
@@ -262,8 +261,9 @@ def get_germline(jobid, ig_database, chain, germfile):
     chain = path to the .fasta file of the desired chain
     germfile = path to the output of igblastp
     """
+    igbplastp_exec = str(Path(IGBLAST_PATH, "igblastp"))
     command = [
-        IGBLAST_PATH + "igblastp",
+        igbplastp_exec,
         "-germline_db_V",
         ig_database,
         "-query",
@@ -298,8 +298,8 @@ def align(searchInputName, hmm, hmmpath, jobid, alignOutputName):
     # hmmalign output file
     fhIn = open(alignOutputName, "w")
     # build hmmalign command
-    # command = [hmmpath + 'hmmalign', '--trim', hmm, searchInputName]
-    command = [HMMER_PATH + "hmmalign", "--trim", hmm, searchInputName]
+    hmmalign_exec = str(Path(HMMER_PATH, "hmmalign"))
+    command = [hmmalign_exec, "--trim", hmm, searchInputName]
 
     # Run hmmalign
     p = sub.Popen(command, stdout=fhIn, stderr=sub.PIPE)
