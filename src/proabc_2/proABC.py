@@ -9,10 +9,10 @@
 #
 
 import argparse
-import jobinput as ji
-import numbering as nb
+import proabc_2.jobinput as ji
+import proabc_2.numbering as nb
 import pandas as pd
-import cnn as cn
+import proabc_2.cnn as cn
 import os
 import numpy as np
 import copy

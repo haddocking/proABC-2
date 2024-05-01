@@ -1,8 +1,10 @@
 import subprocess as sub
 import re
 import os
-from ParseHmmer import readhmmscan, read_align
+from proabc_2.ParseHmmer import readhmmscan, read_align
 from Bio.Seq import Seq
+
+HMMER_PATH = "/home/rodrigo/software/hmmer-3.4/bin/"
 
 
 def read_input_single(file, jobid, hmmpath):
@@ -153,7 +155,7 @@ def isDNA(seq):
 
 
 def isProtein(seq):
-    """Check if protein. 
+    """Check if protein.
 
     Alphabet used is the 20-aa.
     Other characters will invalid the sequence.
@@ -175,7 +177,8 @@ def scan(searchInputName, hmm, hmmpath, jobid, searchOutputName):
     """Scan sequence with HMM"""
 
     # build hmmscan command
-    command = [hmmpath + 'hmmscan', '--domtblout', searchOutputName, hmm, searchInputName]
+    # command = [hmmpath + 'hmmscan', '--domtblout', searchOutputName, hmm, searchInputName]
+    command = [HMMER_PATH + "hmmscan", '--domtblout', searchOutputName, hmm, searchInputName]
 
     # run hmmscan
     p = sub.Popen(command, stdout=sub.PIPE, stderr=sub.PIPE)
@@ -194,7 +197,7 @@ def scan(searchInputName, hmm, hmmpath, jobid, searchOutputName):
 
 def get_germline(jobid, ig_database, chain, germfile):
     """Calculate the germline
-    
+
     chain = path to the .fasta file of the desired chain
     germfile = path to the output of igblastp
     """
@@ -226,7 +229,8 @@ def align(searchInputName, hmm, hmmpath, jobid, alignOutputName):
     # hmmalign output file
     fhIn = open(alignOutputName, 'w')
     # build hmmalign command
-    command = [hmmpath + 'hmmalign', '--trim', hmm, searchInputName]
+    # command = [hmmpath + 'hmmalign', '--trim', hmm, searchInputName]
+    command = [HMMER_PATH + "hmmalign", '--trim', hmm, searchInputName]
 
     # Run hmmalign
     p = sub.Popen(command, stdout=fhIn, stderr=sub.PIPE)
@@ -314,7 +318,7 @@ def checkInput(input, jobid):
     mysequences = []
     seq = ''
     flag = 0
-    validChars = ["A", "C", "G", "T", "R", "V", "W", "P", "F", "Q", "N", 
+    validChars = ["A", "C", "G", "T", "R", "V", "W", "P", "F", "Q", "N",
                   "Y", "H", "S", "I", "M", "D", "E", "L", "K", "X"]
 
     file_tocheck = os.path.join(jobid, input)
