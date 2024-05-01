@@ -1,0 +1,28 @@
+[tool.poetry]
+name = "proabc-2"
+version = "0.1.0"
+description = ""
+authors = ["BonvinLab <bonvinlab.support@uu.nl>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.7"
+tensorflow = "1.14.0"
+biopython = "1.74"
+pandas = "^0.25"
+numpy = "^1.17"
+protobuf = "<=3.20.1"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "*"
+
+[tool.setuptools]
+include-package-data = true
+packages = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
