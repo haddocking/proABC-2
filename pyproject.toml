@@ -14,7 +14,13 @@ numpy = "^1.17"
 protobuf = "<=3.20.1"
 
 [tool.poetry.group.dev.dependencies]
-pytest = "*"
+pytest = "^7.4.4"
+coverage = "^7.2.2"
+pytest-cov = "^4.1.0"
+hypothesis = "^6.79.4"
+
+[tool.poetry.scripts]
+proabc2 = "proabc_2.proABC:main"
 
 [tool.setuptools]
 include-package-data = true

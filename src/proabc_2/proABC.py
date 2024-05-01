@@ -326,7 +326,7 @@ def prediction(input_path, heavy_fasta_file, light_fasta_file):
         raise SystemExit(1)
 
 
-if __name__ == "__main__":
+def main():
 
     # Parse command line arguments
     parser = argparse.ArgumentParser(
@@ -348,3 +348,7 @@ if __name__ == "__main__":
 
     # Make the prediction
     prediction(args.folder, args.heavy, args.light)
+
+
+if __name__ == "__main__":
+    main()
