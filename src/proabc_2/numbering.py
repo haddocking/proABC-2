@@ -17,22 +17,163 @@
 import copy
 
 
-class H():
+class H:
 
-    numbering = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13",
-                 "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27",
-                 "28", "29", "30", "31", "31A", "31B", "31C", "31D", "31E", "31F", "31G", "32", "33", "34",
-                 "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49",
-                 "50",
-                 "51", "52", "52A", "52B", "52C", "52D", "52E", "52F", "52G", "52H", "53", "54", "55", "56",
-                 "57", "58", "59", "60", "61", "62", "63", "64", "65", "66", "67", "68", "69", "70",
-                 "71", "72", "73", "74", "75", "76", "77", "78", "79", "80", "81", "82", "82A", "82B",
-                 "82C", "83", "84", "85", "86", "87", "88", "89", "90", "91", "92", "93", "94", "95", "96",
-                 "97", "98",
-                 "99", "100", "100A", "100B", "100C", "100D", "100E", "100F", "100G", "100H",
-                 "100I", "100J", "100K", "100L", "100M", "100N", "100O", "100P", "100Q", "100R",
-                 "100S", "100T", "100U", "100V", "101", "102", "103", "104", "105", "106", "107",
-                 "108", "109", "110", "111", "112", "113"]
+    numbering = [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "10",
+        "11",
+        "12",
+        "13",
+        "14",
+        "15",
+        "16",
+        "17",
+        "18",
+        "19",
+        "20",
+        "21",
+        "22",
+        "23",
+        "24",
+        "25",
+        "26",
+        "27",
+        "28",
+        "29",
+        "30",
+        "31",
+        "31A",
+        "31B",
+        "31C",
+        "31D",
+        "31E",
+        "31F",
+        "31G",
+        "32",
+        "33",
+        "34",
+        "35",
+        "36",
+        "37",
+        "38",
+        "39",
+        "40",
+        "41",
+        "42",
+        "43",
+        "44",
+        "45",
+        "46",
+        "47",
+        "48",
+        "49",
+        "50",
+        "51",
+        "52",
+        "52A",
+        "52B",
+        "52C",
+        "52D",
+        "52E",
+        "52F",
+        "52G",
+        "52H",
+        "53",
+        "54",
+        "55",
+        "56",
+        "57",
+        "58",
+        "59",
+        "60",
+        "61",
+        "62",
+        "63",
+        "64",
+        "65",
+        "66",
+        "67",
+        "68",
+        "69",
+        "70",
+        "71",
+        "72",
+        "73",
+        "74",
+        "75",
+        "76",
+        "77",
+        "78",
+        "79",
+        "80",
+        "81",
+        "82",
+        "82A",
+        "82B",
+        "82C",
+        "83",
+        "84",
+        "85",
+        "86",
+        "87",
+        "88",
+        "89",
+        "90",
+        "91",
+        "92",
+        "93",
+        "94",
+        "95",
+        "96",
+        "97",
+        "98",
+        "99",
+        "100",
+        "100A",
+        "100B",
+        "100C",
+        "100D",
+        "100E",
+        "100F",
+        "100G",
+        "100H",
+        "100I",
+        "100J",
+        "100K",
+        "100L",
+        "100M",
+        "100N",
+        "100O",
+        "100P",
+        "100Q",
+        "100R",
+        "100S",
+        "100T",
+        "100U",
+        "100V",
+        "101",
+        "102",
+        "103",
+        "104",
+        "105",
+        "106",
+        "107",
+        "108",
+        "109",
+        "110",
+        "111",
+        "112",
+        "113",
+    ]
 
     def __init__(self, aligned):
         """Chothia numbering of heavy chain"""
@@ -44,7 +185,7 @@ class H():
         # single letter residue name as value e.g. 20 --> A
         self.chothia = dict(zip(H.numbering, self.aligned))
 
-        #amino acid sequence of different region of the heavy chain
+        # amino acid sequence of different region of the heavy chain
         self.ModularArchitecture = {
             "L1": "".join(n for n in self.aligned[25:39]),
             "L2": "".join(n for n in self.aligned[59:70]),
@@ -52,7 +193,7 @@ class H():
             "FR1": "".join(n for n in self.aligned[0:25]),
             "FR2": "".join(n for n in self.aligned[39:59]),
             "FR3": "".join(n for n in self.aligned[70:113]),
-            "FR4": "".join(n for n in self.aligned[141:])
+            "FR4": "".join(n for n in self.aligned[141:]),
         }
 
     def getSequence(self):
@@ -67,13 +208,13 @@ class H():
         """Returns length of the loop"""
 
         Lens = {}
-        for i in ['L1', 'L2', "L3"]:
-            Lens['H' + i[1]] = len(self.ModularArchitecture[i].replace("-", ""))
+        for i in ["L1", "L2", "L3"]:
+            Lens["H" + i[1]] = len(self.ModularArchitecture[i].replace("-", ""))
         return Lens
 
     def getCs(self):
         """Identify the heavy chain canonical structures.
-        
+
         Please refer to
         "Antibody modeling with PIGS" nprot. 2014 - Table 1 - for canonical structure rules.
         """
@@ -136,41 +277,176 @@ class H():
         alignedH3 = list(copy.deepcopy(self.aligned))
 
         # Extract H3 stretch
-        H3_stretch = self.aligned[109:144] # 92 Cys : 104 Gly
+        H3_stretch = self.aligned[109:144]  # 92 Cys : 104 Gly
 
         # Get number OF GAPs between 92 and 104
-        gaps = H3_stretch.count('-')
+        gaps = H3_stretch.count("-")
 
-        H3_nogaps= H3_stretch.replace('-', '')
-        split=int(len(H3_nogaps)/2)
+        H3_nogaps = H3_stretch.replace("-", "")
+        split = int(len(H3_nogaps) / 2)
 
         # Get first and second part of H3
         # GAPs in the middle
-        cter=H3_nogaps[0:split]
-        nter=H3_nogaps[split: len(H3_nogaps)]
+        cter = H3_nogaps[0:split]
+        nter = H3_nogaps[split : len(H3_nogaps)]
 
-        H3_aln=cter + '-'*gaps + nter
+        H3_aln = cter + "-" * gaps + nter
 
         alignedH3[109:144] = H3_aln
 
         # Aligned H3 qith GAPs in the middle
-        self.alnH3= ''.join(alignedH3)
+        self.alnH3 = "".join(alignedH3)
 
 
-class K():
-
+class K:
     """Chothia numbering scheme for light chain"""
-    numbering = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14",
-                      "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28",
-                      "29", "30", "30A", "30B", "30C", "30D", "30E", "30F", "30G", "30H", "30I", "30J",
-                      "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44",
-                      "45", "46", "47", "48", "49", "50", "50A", "50B", "50C", "50D", "50E", "50F", "50G",
-                      "50H", "51", "52", "53", "54", "55", "56", "57", "58", "59", "60", "61", "62", "63",
-                      "64", "65", "66", "67", "68", "68A", "68B", "68C", "68D", "68E", "68F", "68G", "68H",
-                      "69", "70", "71", "72", "73", "74", "75", "76", "77", "78", "79", "80", "81", "82",
-                      "83", "84", "85", "86", "87", "88", "89", "90", "91", "92", "93", "94", "95", "95A",
-                      "95B", "95C", "95D", "95E", "95F", "95G", "95H", "96", "97", "98", "99", "100", "101",
-                      "102", "103", "104", "105", "106", "107", "108", "109", "110"]
+
+    numbering = [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "10",
+        "11",
+        "12",
+        "13",
+        "14",
+        "15",
+        "16",
+        "17",
+        "18",
+        "19",
+        "20",
+        "21",
+        "22",
+        "23",
+        "24",
+        "25",
+        "26",
+        "27",
+        "28",
+        "29",
+        "30",
+        "30A",
+        "30B",
+        "30C",
+        "30D",
+        "30E",
+        "30F",
+        "30G",
+        "30H",
+        "30I",
+        "30J",
+        "31",
+        "32",
+        "33",
+        "34",
+        "35",
+        "36",
+        "37",
+        "38",
+        "39",
+        "40",
+        "41",
+        "42",
+        "43",
+        "44",
+        "45",
+        "46",
+        "47",
+        "48",
+        "49",
+        "50",
+        "50A",
+        "50B",
+        "50C",
+        "50D",
+        "50E",
+        "50F",
+        "50G",
+        "50H",
+        "51",
+        "52",
+        "53",
+        "54",
+        "55",
+        "56",
+        "57",
+        "58",
+        "59",
+        "60",
+        "61",
+        "62",
+        "63",
+        "64",
+        "65",
+        "66",
+        "67",
+        "68",
+        "68A",
+        "68B",
+        "68C",
+        "68D",
+        "68E",
+        "68F",
+        "68G",
+        "68H",
+        "69",
+        "70",
+        "71",
+        "72",
+        "73",
+        "74",
+        "75",
+        "76",
+        "77",
+        "78",
+        "79",
+        "80",
+        "81",
+        "82",
+        "83",
+        "84",
+        "85",
+        "86",
+        "87",
+        "88",
+        "89",
+        "90",
+        "91",
+        "92",
+        "93",
+        "94",
+        "95",
+        "95A",
+        "95B",
+        "95C",
+        "95D",
+        "95E",
+        "95F",
+        "95G",
+        "95H",
+        "96",
+        "97",
+        "98",
+        "99",
+        "100",
+        "101",
+        "102",
+        "103",
+        "104",
+        "105",
+        "106",
+        "107",
+        "108",
+        "109",
+        "110",
+    ]
 
     def __init__(self, aligned):
 
@@ -180,7 +456,6 @@ class K():
         # dictionary of composed of Chothia position as key and single letter residue name as value e.g. 20 --> A
         self.chothia = dict(zip(K.numbering, self.aligned))
 
-
         # amino acid sequence of different region of the light chain
         self.ModularArchitecture = {
             "L1": "".join(n for n in self.aligned[25:42]),
@@ -189,7 +464,7 @@ class K():
             "FR1": "".join(n for n in self.aligned[0:25]),
             "FR2": "".join(n for n in self.aligned[42:59]),
             "FR3": "".join(n for n in self.aligned[70:116]),
-            "FR4": "".join(n for n in self.aligned[130:])
+            "FR4": "".join(n for n in self.aligned[130:]),
         }
 
     def getSequence(self):
@@ -199,13 +474,13 @@ class K():
         for i in ["FR1", "L1", "FR2", "L2", "FR3", "L3", "FR4"]:
             if i in self.ModularArchitecture.keys():
                 seq = seq + self.ModularArchitecture[i]
-        return (seq)
+        return seq
 
     def loopLen(self):
         """Returns length of the loop"""
         Lens = {}
-        for i in ['L1', 'L2', "L3"]:
-            Lens['K' + i[1]] = len(self.ModularArchitecture[i].replace("-", ""))
+        for i in ["L1", "L2", "L3"]:
+            Lens["K" + i[1]] = len(self.ModularArchitecture[i].replace("-", ""))
         return Lens
 
     def getCs(self):
@@ -283,22 +558,157 @@ class K():
         CS = [CSK1, CSK2, CSK3]
 
         self.cs = {"L1": CSK1, "L2": CSK2, "L3": CSK3}
-        return (CS)
+        return CS
 
 
-class L():
+class L:
 
-    numbering = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14",
-                 "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28",
-                 "29", "30", "30A", "30B", "30C", "30D", "30E", "30F", "30G", "30H", "30I", "30J",
-                 "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44",
-                 "45", "46", "47", "48", "49", "50", "50A", "50B", "50C", "50D", "50E", "50F", "50G",
-                 "50H", "51", "52", "53", "54", "55", "56", "57", "58", "59", "60", "61", "62", "63",
-                 "64", "65", "66", "67", "68", "68A", "68B", "68C", "68D", "68E", "68F", "68G", "68H",
-                 "69", "70", "71", "72", "73", "74", "75", "76", "77", "78", "79", "80", "81", "82",
-                 "83", "84", "85", "86", "87", "88", "89", "90", "91", "92", "93", "94", "95", "95A",
-                 "95B", "95C", "95D", "95E", "95F", "95G", "95H", "96", "97", "98", "99", "100", "101",
-                 "102", "103", "104", "105", "106", "107", "108", "109", "110"]
+    numbering = [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "10",
+        "11",
+        "12",
+        "13",
+        "14",
+        "15",
+        "16",
+        "17",
+        "18",
+        "19",
+        "20",
+        "21",
+        "22",
+        "23",
+        "24",
+        "25",
+        "26",
+        "27",
+        "28",
+        "29",
+        "30",
+        "30A",
+        "30B",
+        "30C",
+        "30D",
+        "30E",
+        "30F",
+        "30G",
+        "30H",
+        "30I",
+        "30J",
+        "31",
+        "32",
+        "33",
+        "34",
+        "35",
+        "36",
+        "37",
+        "38",
+        "39",
+        "40",
+        "41",
+        "42",
+        "43",
+        "44",
+        "45",
+        "46",
+        "47",
+        "48",
+        "49",
+        "50",
+        "50A",
+        "50B",
+        "50C",
+        "50D",
+        "50E",
+        "50F",
+        "50G",
+        "50H",
+        "51",
+        "52",
+        "53",
+        "54",
+        "55",
+        "56",
+        "57",
+        "58",
+        "59",
+        "60",
+        "61",
+        "62",
+        "63",
+        "64",
+        "65",
+        "66",
+        "67",
+        "68",
+        "68A",
+        "68B",
+        "68C",
+        "68D",
+        "68E",
+        "68F",
+        "68G",
+        "68H",
+        "69",
+        "70",
+        "71",
+        "72",
+        "73",
+        "74",
+        "75",
+        "76",
+        "77",
+        "78",
+        "79",
+        "80",
+        "81",
+        "82",
+        "83",
+        "84",
+        "85",
+        "86",
+        "87",
+        "88",
+        "89",
+        "90",
+        "91",
+        "92",
+        "93",
+        "94",
+        "95",
+        "95A",
+        "95B",
+        "95C",
+        "95D",
+        "95E",
+        "95F",
+        "95G",
+        "95H",
+        "96",
+        "97",
+        "98",
+        "99",
+        "100",
+        "101",
+        "102",
+        "103",
+        "104",
+        "105",
+        "106",
+        "107",
+        "108",
+        "109",
+        "110",
+    ]
 
     def __init__(self, aligned):
 
@@ -316,7 +726,7 @@ class L():
             "FR1": "".join(n for n in self.aligned[0:24]),
             "FR2": "".join(n for n in self.aligned[42:59]),
             "FR3": "".join(n for n in self.aligned[70:116]),
-            "FR4": "".join(n for n in self.aligned[130:])
+            "FR4": "".join(n for n in self.aligned[130:]),
         }
 
     def getSequence(self):
@@ -324,17 +734,17 @@ class L():
         for i in ["FR1", "L1", "FR2", "L2", "FR3", "L3", "FR4"]:
             if i in self.ModularArchitecture.keys():
                 seq = seq + self.ModularArchitecture[i]
-        return (seq)
+        return seq
 
     def loopLen(self):
         """Returns length of the loop"""
         Lens = {}
-        for i in ['L1', 'L2', "L3"]:
-            Lens['K' + i[1]] = len(self.ModularArchitecture[i].replace("-", ""))
+        for i in ["L1", "L2", "L3"]:
+            Lens["K" + i[1]] = len(self.ModularArchitecture[i].replace("-", ""))
         return Lens
 
     def getCs(self):
-        """Canonical structures for L1 loop; Check residues 24, 27, 31, 66, 83; 
+        """Canonical structures for L1 loop; Check residues 24, 27, 31, 66, 83;
 
         See Chailyan et al.
         """
@@ -350,19 +760,29 @@ class L():
                 CSLA1 = 5
 
         if lengthLA1 == 11:
-            if (self.chothia["25"] == "G") and (self.chothia["31"] in ["F", "H", "Y"]) and (
-                    self.chothia["66"] == "K") and (self.chothia["90"] == "S"):
+            if (
+                (self.chothia["25"] == "G")
+                and (self.chothia["31"] in ["F", "H", "Y"])
+                and (self.chothia["66"] == "K")
+                and (self.chothia["90"] == "S")
+            ):
                 CSLA1 = 2
 
             if (self.chothia["66"] == "L") and (self.chothia["90"] == "L"):
                 CSLA1 = 3
 
-            if (self.chothia["25"] == "G") and (self.chothia["31"] in ["N", "D"]) and (self.chothia["66"] == "K") and (
-                    self.chothia["90"] == "S"):
+            if (
+                (self.chothia["25"] == "G")
+                and (self.chothia["31"] in ["N", "D"])
+                and (self.chothia["66"] == "K")
+                and (self.chothia["90"] == "S")
+            ):
                 CSLA1 = 6
 
         if lengthLA1 == 8:
-            if (self.chothia["28"] in ["V", "I", "L"]) and (self.chothia["66"] in ["S", "T"]):
+            if (self.chothia["28"] in ["V", "I", "L"]) and (
+                self.chothia["66"] in ["S", "T"]
+            ):
                 CSLA1 = 4
 
             if (self.chothia["28"] in ["V", "I", "L"]) and (self.chothia["66"] == "N"):
@@ -396,10 +816,10 @@ class L():
             if (self.chothia["92"] == "D") and (self.chothia["95"] in ["S", "T"]):
                 CSLA3 = 3
 
-            if (self.chothia["95"] not in ["S", "T"]):
+            if self.chothia["95"] not in ["S", "T"]:
                 CSLA3 = 4
 
         CS = [CSLA1, CSLA2, CSLA3]
         self.cs = {"L1": CSLA1, "L2": CSLA2, "L3": CSLA3}
 
-        return (CS)
+        return CS
