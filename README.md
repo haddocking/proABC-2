@@ -1,9 +1,10 @@
 # proABC-2
 
 [![ci](https://github.com/haddocking/proABC-2/actions/workflows/ci.yml/badge.svg)](https://github.com/haddocking/proABC-2/actions/workflows/ci.yml)
-[![License](https://img.shields.io/badge/License-Apache%202.0-yellowgreen.svg)](https://opensource.org/licenses/Apache-2.0)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/ce83248d0f1f47ff96e0bc7656c83514)](https://app.codacy.com/gh/haddocking/proABC-2/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
+[![Codacy Badge](https://app.codacy.com/project/badge/Coverage/ce83248d0f1f47ff96e0bc7656c83514)](https://app.codacy.com/gh/haddocking/proABC-2/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_coverage)
 
-![proabc2 logo](logo/logo.png)
+![proabc2 logo](https://raw.githubusercontent.com/haddocking/proABC-2/main/logo/logo.png)
 
 Predicts the antibody residues that will make contact with the antigen and the type of interaction using a Convolutional Neural Network (CNN).
 
