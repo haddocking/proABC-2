@@ -1,9 +1,18 @@
 [tool.poetry]
 name = "proabc-2"
-version = "0.1.0"
-description = ""
+version = "0.1.1"
+description = "Predicts the antibody residues that will make contact with the antigen and the type of interaction using a Convolutional Neural Network."
+license = "Apache-2.0"
 authors = ["BonvinLab <bonvinlab.support@uu.nl>"]
 readme = "README.md"
+classifiers = [
+  "Development Status :: 5 - Production/Stable",
+  "License :: OSI Approved :: Apache Software License",
+  "Operating System :: Unix",
+  "Programming Language :: Python :: 3.7",
+  "Topic :: Scientific/Engineering :: Bio-Informatics",
+  "Intended Audience :: Science/Research",
+]
 
 [tool.poetry.dependencies]
 python = "^3.7"
