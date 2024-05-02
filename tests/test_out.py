@@ -54,9 +54,11 @@ def setup_environment(tmp_path):
             log,
         )
 
-    # golden_feat = os.path.join(jobid, 'Test-features.csv')
-    golden_features = Path(Path(__file__).parent, "golden_data", "Test-features.csv")
-    yield golden_features, os.path.join("Example", "Example-features.csv")
+    test_features = str(Path(Path(__file__).parent, "golden_data", "Test-features.csv"))
+    example_features = str(
+        Path(Path(__file__).parent, "golden_data", "Example-features.csv")
+    )
+    yield test_features, example_features
 
     # Clean up the temporary folder
     shutil.rmtree(test_dir)
