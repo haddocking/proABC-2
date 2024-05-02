@@ -1,5 +1,7 @@
 # proABC-2
-
+![PyPI - License](https://img.shields.io/pypi/l/proabc-2)
+![PyPI - Status](https://img.shields.io/pypi/status/proabc-2)
+![PyPI - Python Version](https://img.shields.io/pypi/pyversions/proabc-2)
 [![ci](https://github.com/haddocking/proABC-2/actions/workflows/ci.yml/badge.svg)](https://github.com/haddocking/proABC-2/actions/workflows/ci.yml)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/ce83248d0f1f47ff96e0bc7656c83514)](https://app.codacy.com/gh/haddocking/proABC-2/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 [![Codacy Badge](https://app.codacy.com/project/badge/Coverage/ce83248d0f1f47ff96e0bc7656c83514)](https://app.codacy.com/gh/haddocking/proABC-2/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_coverage)
