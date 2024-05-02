@@ -5,6 +5,7 @@
 [![ci](https://github.com/haddocking/proABC-2/actions/workflows/ci.yml/badge.svg)](https://github.com/haddocking/proABC-2/actions/workflows/ci.yml)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/ce83248d0f1f47ff96e0bc7656c83514)](https://app.codacy.com/gh/haddocking/proABC-2/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 [![Codacy Badge](https://app.codacy.com/project/badge/Coverage/ce83248d0f1f47ff96e0bc7656c83514)](https://app.codacy.com/gh/haddocking/proABC-2/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_coverage)
+[![fair-software.eu](https://img.shields.io/badge/fair--software.eu-%E2%97%8F%20%20%E2%97%8F%20%20%E2%97%8F%20%20%E2%97%8B%20%20%E2%97%8F-yellow)](https://fair-software.eu)
 
 ![proabc2 logo](https://raw.githubusercontent.com/haddocking/proABC-2/main/logo/logo.png)
 
