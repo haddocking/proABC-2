@@ -1,4 +1,5 @@
 # proABC-2
+
 ![PyPI - License](https://img.shields.io/pypi/l/proabc-2)
 ![PyPI - Status](https://img.shields.io/pypi/status/proabc-2)
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/proabc-2)
@@ -13,6 +14,20 @@ Predicts the antibody residues that will make contact with the antigen and the t
 
 ## Installation
 
+proABC-2 is available both locally as a python package and as a Docker container. See below instructions for each case.
+
+### Docker
+
+The docker image is available on the Github Container Registry and can be pulled using the following command:
+
+```bash
+docker pull ghcr.io/haddocking/proabc-2:latest
+```
+
+### Local
+
+> proABC-2 has some [third-party](THIRD_PARTY.md) dependencies that must be installed before running the software.
+
 proABC-2 is available on PyPI and can be installed using pip:
 
 ```text
@@ -21,7 +36,7 @@ pip install proabc-2
 
 It also depends on two third-party software, HMMER and IGBLAST, check the [third-party](THIRD_PARTY.md) section for more information.
 
-## Example
+## Example (Local and Docker)
 
 Set up the data to run the example:
 
@@ -41,19 +56,23 @@ echo ">APDB_H\nEVQLVESGGGLVQPGGSLRLSCAASGYTFTNYGMNWVRQAPGKGLEWVGWINTYTGEPTYAADFK
 echo ">APDB_L\nDIQMTQSPSSLSASVGDRVTITCSASQDISNYLNWYQQKPGKAPKVLIYFTSSLHSGVPSRFSGSGSGTDFTLTISSLQPEDFATYYCQQYSTVPWTFGQGTKVEIKRTV" > proabc2-prediction/light.fasta
 ```
 
-- Execute `proabc-2`:
-
-The input is in the following format:
+### Execution (Docker)
 
 ```bash
-proabc2 <input-folder> <heavy-fasta-filename> <light-fasta-filename>
+docker run \
+  --rm \
+  -v `pwd`:/data \
+  ghcr.io/haddocking/proabc-2:latest \
+  proabc2-prediction/ heavy.fasta light.fasta
 ```
 
-So in this example:
+### Execution (Local)
 
-```
+```text
 proabc2 proabc2-prediction/ heavy.fasta light.fasta
 ```
+
+### Results
 
 The output will be in the same folder as the input files, named as `heavy-pred.csv` and `light-pred.csv`.
 

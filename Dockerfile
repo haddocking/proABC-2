@@ -47,9 +47,12 @@ WORKDIR /opt/software/proABC-2
 COPY . .
 RUN poetry install --only main
 
+#==============================================================================================
+FROM build AS prod
+
 WORKDIR /data
 
-ENTRYPOINT ["poetry", "run", "proabc2"]
+ENTRYPOINT ["proabc2"]
 #==============================================================================================
 
 FROM build AS test
@@ -61,3 +64,4 @@ RUN poetry install
 ENTRYPOINT [""]
 
 #==============================================================================================
+
