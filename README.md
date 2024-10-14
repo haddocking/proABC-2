@@ -28,7 +28,7 @@ docker pull ghcr.io/haddocking/proabc-2:latest
 
 > proABC-2 has some [third-party](THIRD_PARTY.md) dependencies that must be installed before running the software.
 
-proABC-2 is available on PyPI and can be installed using pip:
+proABC-2 is available on PyPI and can be installed using pip using Python3.7:
 
 ```text
 pip install proabc-2
@@ -61,6 +61,7 @@ echo ">APDB_L\nDIQMTQSPSSLSASVGDRVTITCSASQDISNYLNWYQQKPGKAPKVLIYFTSSLHSGVPSRFSGS
 ```bash
 docker run \
   --rm \
+  --user $(id -u):$(id -g) \
   -v `pwd`:/data \
   ghcr.io/haddocking/proabc-2:latest \
   proabc2-prediction/ heavy.fasta light.fasta
